@@ -1,0 +1,113 @@
+@import 'config';
+
+.koru-body-bg {
+    z-index: -1;
+    position: fixed;
+    top: 0;
+    left: calc(-100vw / 2);
+    right: 0;
+    pointer-events: none;
+    width: 200vw;
+    height: 200vh;
+    mix-blend-mode: color;
+    background: radial-gradient(50% 50% at 50% 50%, #fc077d10 0%, rgba(255, 255, 255, 0) 100%);
+    transform: translateY(-100vh);
+    will-change: background;
+    transition: background 450ms ease;
+}
+
+.koru-default-bg {
+    background: url("/images/bg.png") no-repeat center;
+    background-size: cover;
+}
+
+.koru-bg-primary {
+    background: linear-gradient(270deg, #FF9DCC 0%, #FFE7A8 100%);
+}
+
+.koru-gradient-text-1 {
+    background: linear-gradient(90deg, #ffc78e 0%, #f1a2bc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+}
+
+.koru-gradient-text-2 {
+    background: linear-gradient(90deg, #cea2ce 0%, #95b1fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+}
+
+.koru-input-text {
+    @apply text-sm dark:bg-koru-blue-dark border-gray-100 border-opacity-20 border dark:border-koru-gray-lighter bg-gray-200 rounded-2xl px-4 py-3 transition-colors outline-0;
+
+    @apply hover:border-koru-blue;
+
+    &.invalid {
+        @apply border-koru-red;
+    }
+
+    &.valid {
+        @apply border-koru-green;
+    }
+
+    &._inverted {
+        @apply bg-transparent border border-2 border-koru-gray-lighter;
+    }
+
+    &::-webkit-input-placeholder {
+        @apply text-gray-700 font-bold;
+    }
+}
+
+.koru-box {
+    @apply rounded-3xl p-3 lg:p-10 bg-white bg-opacity-50;
+}
+
+.koru-symbol {
+    @apply border border-koru-gray-light px-4 py-2 lg:px-6 lg:py-3 block font-bold rounded-2xl;
+}
+
+.koru-btn {
+    @apply cursor-pointer text-center hover:opacity-80 flex-shrink-0 px-6 py-3 text-white text-sm bg-koru-gray-light rounded-2xl transition-colors outline-0 disabled:cursor-not-allowed;
+
+    &._small {
+        @apply text-xs px-4 py-3 rounded-xl;
+    }
+
+    &._red {
+        @apply bg-koru-red;
+    }
+
+    &._primary {
+        @apply bg-koru-purple;
+    }
+
+    &._dark {
+        @apply bg-koru-gray;
+    }
+
+    &._gray {
+        @apply bg-koru-gray-lighter;
+    }
+}
+
+.koru-modal {
+    @apply fixed w-full h-full bg-black flex items-center justify-center left-0 top-0 bg-opacity-40 transition-all flex flex-col gap-10;
+}
+
+.icon-close {
+    &:before {
+        content: '\00d7';
+        @apply font-normal text-2xl opacity-70;
+    }
+}
+
+.koru-bullet {
+    @apply flex items-center justify-center text-white w-10 h-10 rounded-full bg-koru-blue block flex-shrink-0;
+}
+
+.koru-golden-bg {
+    background: linear-gradient(180deg, #FFF6E0 0%, #FFD49C 100%), linear-gradient(180deg, #040615 0%, rgba(43, 48, 95, 0.26) 100%);
+}

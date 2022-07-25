@@ -1,0 +1,25 @@
+.animation {
+    animation: float 6s ease-in-out infinite;
+
+    &.delay {
+        animation-delay: 0.8s;
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translatey(0px);
+    }
+    50% {
+        transform: translatey(-40px);
+    }
+    100% {
+        transform: translatey(0px);
+    }
+}
+
+.koru-loading {
+    background: url("../../assets/icons/icon-loading.svg") no-repeat center center;
+    background-size: 30px;
+    @apply bg-white bg-opacity-30;
+}

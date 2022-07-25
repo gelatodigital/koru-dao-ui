@@ -1,0 +1,30 @@
+$background: rgb(34, 36, 41);
+$gray: #141619;
+$gray-light: #BFBFBF;
+$gray-lighter: #40444f;
+$purple: #8B62F3;
+
+$red: #fd4040;
+$red-light: #ff7c91;
+$red-dark: #270710;
+$brown: #542432;
+$blue: #4530E2;
+$blue-dark: #222429;
+$yellow: #e3a507;
+$green: #61cf8d;
+
+:root {
+    --koru-color-background: #{$background};
+    --koru-color-blue: #{$blue};
+    --koru-color-blue-dark: #{$blue-dark};
+    --koru-color-gray: #{$gray};
+    --koru-color-gray-light: #{$gray-light};
+    --koru-color-gray-lighter: #{$gray-lighter};
+    --koru-color-purple: #{$purple};
+    --koru-color-brown: #{$brown};
+    --koru-color-red: #{$red};
+    --koru-color-red-dark: #{$red-dark};
+    --koru-color-red-light: #{$red-light};
+    --koru-color-green: #{$green};
+    --koru-color-yellow: #{$yellow};
+}
