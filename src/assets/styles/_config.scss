@@ -1,8 +1,9 @@
 $background: rgb(34, 36, 41);
 $gray: #141619;
-$gray-light: #BFBFBF;
+$gray-light: #EDEAFE;
 $gray-lighter: #40444f;
 $purple: #8B62F3;
+$purple-dark: #674F8D;
 
 $red: #fd4040;
 $red-light: #ff7c91;
@@ -21,6 +22,7 @@ $green: #61cf8d;
     --koru-color-gray-light: #{$gray-light};
     --koru-color-gray-lighter: #{$gray-lighter};
     --koru-color-purple: #{$purple};
+    --koru-color-purple-dark: #{$purple-dark};
     --koru-color-brown: #{$brown};
     --koru-color-red: #{$red};
     --koru-color-red-dark: #{$red-dark};

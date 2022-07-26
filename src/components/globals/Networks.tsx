@@ -8,7 +8,7 @@ import { AppContext } from '../../contexts/AppContext';
 export default function Networks() {
     const { isConnected } = useAccount();
     const { disconnect } = useDisconnect();
-    const { connect, connectors, error, isLoading, pendingConnector } = useConnect();
+    const { error } = useConnect();
     const { chain } = useNetwork();
     const { switchNetwork } = useSwitchNetwork();
 
@@ -49,7 +49,7 @@ export default function Networks() {
                 {isConnected && (
                     <button
                         onClick={() => disconnect()}
-                        className="koru-btn"
+                        className="koru-btn _link"
                     >
                         Disconnect
                     </button>
@@ -57,9 +57,9 @@ export default function Networks() {
 
                 {!isConnected && <button
                   onClick={() => setConnectModal(true)}
-                  className="koru-btn _primary"
+                  className="koru-btn _link"
                 >
-                    Connect
+                    Connect Wallet
                 </button>
                 }
             </div>

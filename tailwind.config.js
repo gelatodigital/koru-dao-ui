@@ -12,6 +12,7 @@ module.exports = {
                 'koru-gray-light': 'var(--koru-color-gray-light)',
                 'koru-gray-lighter': 'var(--koru-color-gray-lighter)',
                 'koru-purple': 'var(--koru-color-purple)',
+                'koru-purple-dark': 'var(--koru-color-purple-dark)',
                 'koru-brown': 'var(--koru-color-brown)',
                 'koru-red': 'var(--koru-color-red)',
                 'koru-red-dark': 'var(--koru-color-red-dark)',

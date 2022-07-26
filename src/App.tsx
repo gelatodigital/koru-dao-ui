@@ -3,20 +3,23 @@ import { useAccount } from 'wagmi';
 import iconGelato from '@/assets/icons/icon-gelato.svg';
 import { AppContext } from './contexts/AppContext';
 import { useContext } from 'react';
-import ConnectModal from './components/globals/ConnectModal';
+import MessageBox from './components/home/MessageBox';
+import ConnectModal from './components/modals/ConnectModal';
+import PostsBox from './components/home/PostsBox';
+import NoHandlerModal from './components/modals/NoHandlerModal';
 
 export default function App() {
     const { isConnected } = useAccount();
-    const { connectModal, nftID, isWinner, hasClaimed, opsTaskId } = useContext(AppContext);
+    const { connectModal, lensHandler, noLensModal } = useContext(AppContext);
 
     return (
         <div className="mx-auto container p-5 pb-20 relative">
             <Header />
-            <main className={'text-center mt-6 lg:mt-20'}>
+            <main className="text-center mt-6 lg:mt-20 md:w-[640px] mx-auto">
 
-                <div className='koru-box mt-6 lg:mt-10 md:w-[640px] mx-auto'>
-                    Hello Koru
-                </div>
+                <MessageBox />
+
+                <PostsBox />
 
             </main>
 
@@ -25,6 +28,8 @@ export default function App() {
             </div>
 
             {connectModal && <ConnectModal />}
+
+            {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
         </div>
     );
 }

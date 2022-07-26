@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import metamask from '@/assets/icons/icon-metamask.svg';
 import walletConnect from '@/assets/icons/icon-wallet-connect.svg';
 import { AppContext } from '../../contexts/AppContext';
+import KoruModal from '../globals/KoruModal';
 
 export default function ConnectModal() {
     const { connector } = useAccount();
@@ -28,10 +29,10 @@ export default function ConnectModal() {
     const { setConnectModal } = useContext(AppContext);
 
     return (
-        <div className="koru-modal">
-
-            <div className="relative">
-                <div className="bg-white p-2 text-white rounded-2xl grid lg:grid-cols-2 relative">
+        <KoruModal
+            close={setConnectModal}
+            modal={
+                <div className="grid lg:grid-cols-2">
                     {connectors
                         .filter((x) => x.ready && x.id !== connector?.id)
                         .map((x) => (
@@ -49,8 +50,7 @@ export default function ConnectModal() {
                             </div>
                         ))}
                 </div>
-                <span className="cursor-pointer p-3 absolute text-black icon-close top-1 right-3 hover:opacity-50" onClick={() => setConnectModal(false)} />
-            </div>
-        </div>
+            }
+        />
     );
 }

@@ -26,7 +26,7 @@
 }
 
 .koru-gradient-text-1 {
-    background: linear-gradient(90deg, #ffc78e 0%, #f1a2bc 100%);
+    background: linear-gradient(90deg, #7D43E8 0%, #D72D79 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     -webkit-box-decoration-break: clone;
@@ -62,7 +62,7 @@
 }
 
 .koru-box {
-    @apply rounded-3xl p-3 lg:p-10 bg-white bg-opacity-50;
+    @apply rounded-3xl p-3 lg:px-8 lg:py-6 bg-white bg-opacity-50;
 }
 
 .koru-symbol {
@@ -70,7 +70,11 @@
 }
 
 .koru-btn {
-    @apply cursor-pointer text-center hover:opacity-80 flex-shrink-0 px-6 py-3 text-white text-sm bg-koru-gray-light rounded-2xl transition-colors outline-0 disabled:cursor-not-allowed;
+    @apply font-medium cursor-pointer text-center hover:opacity-80 flex-shrink-0 px-6 py-3 text-white text-sm bg-koru-gray-light rounded-2xl transition-colors outline-0 disabled:cursor-not-allowed;
+
+    &._link {
+        @apply bg-none text-koru-purple;
+    }
 
     &._small {
         @apply text-xs px-4 py-3 rounded-xl;
@@ -94,7 +98,7 @@
 }
 
 .koru-modal {
-    @apply fixed w-full h-full bg-black flex items-center justify-center left-0 top-0 bg-opacity-40 transition-all flex flex-col gap-10;
+    @apply fixed w-full h-full bg-black flex items-center justify-center left-0 top-0 bg-opacity-50 transition-all flex flex-col gap-10;
 }
 
 .icon-close {

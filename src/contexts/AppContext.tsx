@@ -2,8 +2,8 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { supportedChains } from '../blockchain/constants';
 import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { nftContract } from '../blockchain/nftContract.factory';
-import { GET_USER_BALANCES } from '../utils/utils';
-import { ethers, Signer } from 'ethers';
+import { GET_DEFAULT_PROFILES } from '../utils/utils';
+import { Signer } from 'ethers';
 import request from 'graphql-request';
 
 const contextDefaultValues: any = {
@@ -19,7 +19,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [connectModal, setConnectModal] = useState<boolean>(false);
 
     const [nftID, setNftID] = useState<string | null>(null);
-    const [opsBalance, setOpsBalance] = useState<number | null>(null);
+    const [lensHandler, setLensHandler] = useState<number | null>(null);
+    const [noLensModal, setNoLensModal] = useState<boolean>(true);
 
     const getNft = async () => {
         try {
@@ -37,13 +38,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const fetchAndUpdateLensHandle = async () => {
+        try {
 
-    const fetchAndUpdateBalances = async () => {
-        const b = await request(supportedChains[chain?.id as number].subgraphUrl, GET_USER_BALANCES, {
-            userId: address?.toLowerCase(),
-        });
-
-        setOpsBalance(parseFloat(ethers.utils.formatUnits(b.taskCreator?.balances[0].balance)));
+            const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_DEFAULT_PROFILES, {
+                request: {
+                    ethereumAddress: address?.toLowerCase(),
+                },
+            });
+            setLensHandler(defaultProfile);
+        } catch (err) {
+            setNoLensModal(true);
+            console.warn('No lens handler was found');
+        }
     };
 
     useEffect(() => {
@@ -52,11 +59,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
 
         getNft();
-        fetchAndUpdateBalances();
+        fetchAndUpdateLensHandle();
 
         const interval = setInterval(() => {
-            getNft();
-            fetchAndUpdateBalances();
+            // not needed yet.
         }, 10000);
 
         return () => clearInterval(interval);
@@ -68,7 +74,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 connectModal,
                 setConnectModal,
                 nftID,
-                opsBalance,
+                lensHandler,
+                noLensModal,
+                setNoLensModal,
             }}
         >
             {children}
