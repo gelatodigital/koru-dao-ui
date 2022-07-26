@@ -19,7 +19,7 @@ export const supportedChains: {
         lensUrl: 'https://api.lens.dev/',
     },
     80001: {
-        nft: '0x3488aA03d04699627840a0776F42d8A495D823D4',
+        nft: '0x2334Bb5d5A1547970767315dE048e939C94D6E34',
         sponsor: '0x5ce6047a715B1919A58C549E6FBc1921B4d9287D',
         maxFee: '1',
         ops: '0xB3f5503f93d5Ef84b06993a1975B9D21B962892F',

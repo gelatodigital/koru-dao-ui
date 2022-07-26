@@ -1,6 +1,6 @@
 import UiIcon from '../globals/UiIcon';
 
-export default function MessageBox() {
+export default function SendMessageBox() {
 
     return (
         <div className="koru-box mt-6 lg:mt-10 p-10">

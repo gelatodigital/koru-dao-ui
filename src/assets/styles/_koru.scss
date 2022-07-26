@@ -39,6 +39,14 @@
     -webkit-box-decoration-break: clone;
 }
 
+.koru-gradient-text-3 {
+    background: linear-gradient(180deg, #773549 2.38%, #1B0008 171.88%), #FFFFFF;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-box-decoration-break: clone;
+}
+
+
 .koru-input-text {
     @apply text-sm dark:bg-koru-blue-dark border-gray-100 border-opacity-20 border dark:border-koru-gray-lighter bg-gray-200 rounded-2xl px-4 py-3 transition-colors outline-0;
 
@@ -94,6 +102,10 @@
 
     &._gray {
         @apply bg-koru-gray-lighter;
+    }
+
+    &._pink {
+        @apply bg-koru-pink;
     }
 }
 

@@ -3,22 +3,24 @@ import { useAccount } from 'wagmi';
 import iconGelato from '@/assets/icons/icon-gelato.svg';
 import { AppContext } from './contexts/AppContext';
 import { useContext } from 'react';
-import MessageBox from './components/home/MessageBox';
+import SendMessageBox from './components/home/SendMessageBox';
 import ConnectModal from './components/modals/ConnectModal';
 import PostsBox from './components/home/PostsBox';
 import NoHandlerModal from './components/modals/NoHandlerModal';
+import MintNft from './components/home/MintNft';
+import MintNftModal from './components/modals/MintNftModal';
 
 export default function App() {
-    const { isConnected } = useAccount();
-    const { connectModal, lensHandler, noLensModal } = useContext(AppContext);
+    const { isConnected, isConnecting } = useAccount();
+    const { connectModal, lensHandler, noLensModal, mintModal } = useContext(AppContext);
 
     return (
         <div className="mx-auto container p-5 pb-20 relative">
             <Header />
             <main className="text-center mt-6 lg:mt-20 md:w-[640px] mx-auto">
 
-                <MessageBox />
-
+                {isConnected && <MintNft />}
+                <SendMessageBox />
                 <PostsBox />
 
             </main>
@@ -28,8 +30,10 @@ export default function App() {
             </div>
 
             {connectModal && <ConnectModal />}
+            {mintModal && <MintNftModal />}
 
             {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
+
         </div>
     );
 }

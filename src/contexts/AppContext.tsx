@@ -17,6 +17,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const { address, isConnected } = useAccount();
     const { data: signer } = useSigner();
     const [connectModal, setConnectModal] = useState<boolean>(false);
+    const [mintModal, setMintModal] = useState<boolean>(false);
 
     const [nftID, setNftID] = useState<string | null>(null);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
@@ -77,6 +78,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 lensHandler,
                 noLensModal,
                 setNoLensModal,
+                mintModal,
+                setMintModal,
             }}
         >
             {children}

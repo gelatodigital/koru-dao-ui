@@ -1,10 +1,11 @@
 $background: rgb(34, 36, 41);
 $gray: #141619;
-$gray-light: #EDEAFE;
+$gray-light: #e7e4f8;
 $gray-lighter: #40444f;
 $purple: #8B62F3;
 $purple-dark: #674F8D;
 
+$pink: #F362A8;
 $red: #fd4040;
 $red-light: #ff7c91;
 $red-dark: #270710;
@@ -24,6 +25,7 @@ $green: #61cf8d;
     --koru-color-purple: #{$purple};
     --koru-color-purple-dark: #{$purple-dark};
     --koru-color-brown: #{$brown};
+    --koru-color-pink: #{$pink};
     --koru-color-red: #{$red};
     --koru-color-red-dark: #{$red-dark};
     --koru-color-red-light: #{$red-light};
