@@ -1,19 +1,22 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { nftContract } from '../../blockchain/nftContract.factory';
 import { supportedChains } from '../../blockchain/constants';
 import { ethers, Signer } from 'ethers';
 import { GelatoRelaySDK } from '@gelatonetwork/gelato-relay-sdk';
 import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import MintNftModal from '../modals/MintNftModal';
 
 export default function MintNft() {
 
-    const { lensHandler, setMintModal } = useContext(AppContext);
+    const { lensHandler, setMintModal, mintModal } = useContext(AppContext);
     const { address } = useAccount();
     const { chain } = useNetwork();
     const { signTypedDataAsync } = useSignTypedData();
     const { data: signer } = useSigner();
     const provider = useProvider();
+
+    const [isMinting, setIsMinting] = useState<any>(false);
 
     const mint = async () => {
         try {
@@ -43,6 +46,8 @@ export default function MintNft() {
             const metaTxRequestData = GelatoRelaySDK.getMetaTxRequestWalletPayloadToSign(metaTxRequest);
             const userSignature = await signTypedDataAsync(metaTxRequestData);
 
+            setIsMinting(true);
+
             const resp = await fetch('https://relay-sponsor-backend.herokuapp.com/sponsor/sign', {
                 method: "POST",
                 headers: {
@@ -60,7 +65,7 @@ export default function MintNft() {
             }
         } catch (e) {
             setMintModal(false);
-            alert('Something went wrong, please try again.');
+            setIsMinting(false);
         }
     };
 
@@ -87,6 +92,8 @@ export default function MintNft() {
                     Mint NFT now
                 </button>
             </div>
+
+            {mintModal && <MintNftModal propIsMinting={isMinting} />}
         </div>
     );
 };

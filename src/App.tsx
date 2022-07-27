@@ -31,7 +31,6 @@ export default function App() {
             </div>
 
             {connectModal && <ConnectModal />}
-            {mintModal && <MintNftModal />}
 
             {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
 
