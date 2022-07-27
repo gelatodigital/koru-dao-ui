@@ -21,12 +21,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const [nftID, setNftID] = useState<string | null>(null);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
-    const [noLensModal, setNoLensModal] = useState<boolean>(true);
+    const [noLensModal, setNoLensModal] = useState<boolean>(false);
 
     const getNft = async () => {
         try {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
-            const tokenId = await contract.tokenOfOwnerByIndex(address, 0);
+            const tokenId = await contract.balanceOf(address, 0);
             if (!tokenId) return;
             const tokenUri = await contract.tokenURI(tokenId);
 
@@ -41,13 +41,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const fetchAndUpdateLensHandle = async () => {
         try {
-
             const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_DEFAULT_PROFILES, {
                 request: {
                     ethereumAddress: address?.toLowerCase(),
                 },
             });
             setLensHandler(defaultProfile);
+            if (!defaultProfile) {
+                setNoLensModal(true);
+            }
         } catch (err) {
             setNoLensModal(true);
             console.warn('No lens handler was found');
@@ -63,7 +65,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         fetchAndUpdateLensHandle();
 
         const interval = setInterval(() => {
-            // not needed yet.
+            getNft();
         }, 10000);
 
         return () => clearInterval(interval);

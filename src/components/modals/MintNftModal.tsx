@@ -1,20 +1,24 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import KoruModal from '../globals/KoruModal';
 import { AppContext } from '../../contexts/AppContext';
 import UiIcon from '../globals/UiIcon';
 
 export default function MintNftModal() {
 
-    const { lensHandler, noLensModal, mintModal, setMintModal } = useContext(AppContext);
+    const { setMintModal, nftId } = useContext(AppContext);
+
     const [isMinting, setIsMinting] = useState<any>(true);
 
-    const handleMinting = () => {
-        setIsMinting(true);
-    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+            console.log('minting');
+            if (nftId) {
+                setIsMinting(false);
+            }
+        }, 10000);
 
-    setTimeout(() => {
-        setIsMinting(false);
-    }, 3000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <KoruModal
@@ -46,7 +50,8 @@ export default function MintNftModal() {
                           </p>
                           <button
                             onClick={() => setMintModal(false)}
-                            className='koru-btn _pink'>Start post</button>
+                            className="koru-btn _pink">Start post
+                          </button>
                       </>
                     }
                 </div>

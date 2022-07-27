@@ -15,7 +15,8 @@ export default function SendMessageBox() {
                     </p>
                     <textarea
                         disabled
-                        rows={4} className="w-full p-4 mt-4"
+                        rows={4}
+                        className="w-full p-4 mt-4 min-h-[100px]"
                         placeholder="Hello, world!"
                     />
                 </div>

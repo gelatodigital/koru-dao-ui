@@ -1,14 +1,67 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
+import { nftContract } from '../../blockchain/nftContract.factory';
+import { supportedChains } from '../../blockchain/constants';
+import { ethers, Signer } from 'ethers';
+import { GelatoRelaySDK } from '@gelatonetwork/gelato-relay-sdk';
+import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
 
 export default function MintNft() {
 
-    const { lensHandler, noLensModal, mintModal, setMintModal } = useContext(AppContext);
+    const { lensHandler, setMintModal } = useContext(AppContext);
+    const { address } = useAccount();
+    const { chain } = useNetwork();
+    const { signTypedDataAsync } = useSignTypedData();
+    const { data: signer } = useSigner();
+    const provider = useProvider();
 
-    const [isMinting, setIsMinting] = useState<any>(false);
+    const mint = async () => {
+        try {
+            setMintModal(true);
+            console.log(supportedChains[chain?.id as number].nft);
+            const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const { address: metaboxAddress, abi: metaboxAbi } =
+                GelatoRelaySDK.getMetaBoxAddressAndABI(chain?.id as number);
 
-    const handleMinting = () => {
-        setIsMinting(true);
+            const metaBox = new ethers.Contract(metaboxAddress, metaboxAbi, provider);
+            const nonce = Number(await metaBox.nonce(address));
+
+            const metaTxRequest = GelatoRelaySDK.metaTxRequest(
+                chain?.id as number,
+                supportedChains[chain?.id as number].nft,
+                contract.interface.encodeFunctionData("mint", []),
+                "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+                2,
+                ethers.utils.parseEther(supportedChains[chain?.id as number].maxFee).toString(),
+                '20000000',
+                address as string,
+                nonce,
+                supportedChains[chain?.id as number].sponsor,
+            );
+
+            // Get transaction data
+            const metaTxRequestData = GelatoRelaySDK.getMetaTxRequestWalletPayloadToSign(metaTxRequest);
+            const userSignature = await signTypedDataAsync(metaTxRequestData);
+
+            const resp = await fetch('https://relay-sponsor-backend.herokuapp.com/sponsor/sign', {
+                method: "POST",
+                headers: {
+                    cache: "no-cache",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userSignature,
+                    metaTxRequest,
+                }),
+            });
+
+            if (!resp.ok) {
+                throw 'myException';
+            }
+        } catch (e) {
+            setMintModal(false);
+            alert('Something went wrong, please try again.');
+        }
     };
 
     return (
