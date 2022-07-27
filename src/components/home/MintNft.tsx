@@ -81,7 +81,7 @@ export default function MintNft() {
                 <button
                     style={!lensHandler ? { opacity: 0.5 } : {}}
                     disabled={!lensHandler}
-                    onClick={() => setMintModal(true)}
+                    onClick={() => mint()}
                     className="koru-btn _pink inline-block"
                 >
                     Mint NFT now
