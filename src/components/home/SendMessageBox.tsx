@@ -1,8 +1,8 @@
 import UiIcon from '../globals/UiIcon';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { GelatoRelaySDK } from '@gelatonetwork/gelato-relay-sdk';
-import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
+import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
 import { ethers, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { koruContract } from '../../blockchain/koruContract.factory';
@@ -13,31 +13,38 @@ export default function SendMessageBox() {
     const provider = useProvider();
     const { address } = useAccount();
     const { data: signer } = useSigner();
+    const { signTypedDataAsync } = useSignTypedData();
 
     const { lensHandler }: any = useContext(AppContext);
-    const lensProfileId = lensHandler?.handle;
-    const contentUri = "Hello";
-    const contentModule = supportedChains[chain?.id as number].freeCollectModule;
-    const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
-    const referenceModule = "0x0000000000000000000000000000000000000000";
-    const referenceModuleInitData = "0x";
 
-    const { address: metaboxAddress, abi: metaboxAbi } =
-        GelatoRelaySDK.getMetaBoxAddressAndABI(chain?.id as number);
+    const [isPosting, setIsPosting] = useState<any>(false);
+    const [isGettingSignature, setIsGettingSignature] = useState<any>(false);
 
     const post = async () => {
         try {
+            setIsGettingSignature(true);
+            const lensProfileId = lensHandler?.id;
+            const contentUri = "Hello";
+            const contentModule = supportedChains[chain?.id as number].freeCollectModule;
+            const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
+            const referenceModule = "0x0000000000000000000000000000000000000000";
+            const referenceModuleInitData = "0x";
+
+            const { address: metaboxAddress, abi: metaboxAbi } =
+                GelatoRelaySDK.getMetaBoxAddressAndABI(chain?.id as number);
             const contract = koruContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             const metaBox = new ethers.Contract(metaboxAddress, metaboxAbi, provider);
             const nonce = Number(await metaBox.nonce(address));
 
             const koruDaoPostData = contract.interface.encodeFunctionData("post", [
-                lensProfileId,
-                contentUri,
-                contentModule,
-                collectModuleInitData,
-                referenceModule,
-                referenceModuleInitData,
+                [
+                    lensProfileId,
+                    contentUri,
+                    contentModule,
+                    collectModuleInitData,
+                    referenceModule,
+                    referenceModuleInitData,
+                ],
             ]);
 
             const metaTxRequest = GelatoRelaySDK.metaTxRequest(
@@ -53,9 +60,35 @@ export default function SendMessageBox() {
                 supportedChains[chain?.id as number].sponsor,
             );
 
-            debugger;
+            // Get transaction data
+            const metaTxRequestData = GelatoRelaySDK.getMetaTxRequestWalletPayloadToSign(metaTxRequest);
+            const userSignature = await signTypedDataAsync(metaTxRequestData);
+
+            setIsPosting(true);
+
+            const resp = await fetch('https://relay-sponsor-backend.herokuapp.com/sponsor/sign', {
+                method: "POST",
+                headers: {
+                    cache: "no-cache",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userSignature,
+                    metaTxRequest,
+                }),
+            });
+
+            if (!resp.ok) {
+                throw 'Failed to post message';
+            }
+
         } catch (e) {
-            console.log(e);
+            console.warn('Failed to post message', e);
+            setIsGettingSignature(false);
+            setIsPosting(false);
+        } finally {
+            setIsGettingSignature(false);
+            setIsPosting(false);
         }
     };
 
@@ -82,11 +115,11 @@ export default function SendMessageBox() {
             </div>
             <div className="flex justify-end mt-10">
                 <button
-                    disabled={!lensHandler}
+                    disabled={!lensHandler || isGettingSignature}
                     onClick={() => post()}
-                    className="koru-btn _primary w-44"
+                    className="koru-btn _primary w-44 flex items-center gap-4 justify-center"
                 >
-                    Post
+                    {isGettingSignature ? <UiIcon icon={'loading'} classes="w-6 h-6" /> : 'Post'}
                 </button>
             </div>
         </div>

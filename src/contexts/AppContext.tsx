@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { supportedChains } from '../blockchain/constants';
 import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { nftContract } from '../blockchain/nftContract.factory';
-import { GET_DEFAULT_PROFILES } from '../utils/utils';
+import { GET_DEFAULT_PROFILES, GET_PUBLICATIONS } from '../utils/utils';
 import { Signer } from 'ethers';
 import request from 'graphql-request';
 import { koruContract } from '../blockchain/koruContract.factory';
@@ -55,6 +55,24 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const fetchAndUpdateLensHandle = async () => {
         try {
             const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_DEFAULT_PROFILES, {
+                request: {
+                    ethereumAddress: address?.toLowerCase(),
+                },
+            });
+            setLensHandler(defaultProfile);
+            if (!defaultProfile) {
+                setNoLensModal(true);
+            }
+        } catch (err) {
+            setNoLensModal(true);
+            console.warn('No lens handler was found');
+        }
+    };
+
+
+    const fetchPosts = async () => {
+        try {
+            const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_PUBLICATIONS, {
                 request: {
                     ethereumAddress: address?.toLowerCase(),
                 },

@@ -61,7 +61,7 @@ export default function MintNft() {
             });
 
             if (!resp.ok) {
-                throw 'myException';
+                throw 'Failed to mint';
             }
         } catch (e) {
             setMintModal(false);
