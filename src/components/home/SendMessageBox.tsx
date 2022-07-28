@@ -149,13 +149,14 @@ export default function SendMessageBox() {
                 </div>
             </div>
             <div className="flex justify-end mt-10">
-                <button
-                    disabled={!lensHandler || isGettingSignature}
-                    onClick={() => post()}
-                    className="koru-btn _primary w-44 flex items-center gap-4 justify-center"
+                {!isPosted && <button
+                  disabled={!lensHandler || isGettingSignature}
+                  onClick={() => post()}
+                  className="koru-btn _primary w-44 flex items-center gap-4 justify-center"
                 >
                     {isGettingSignature ? <UiIcon icon={'loading'} classes="w-6 h-6" /> : 'Post'}
                 </button>
+                }
             </div>
         </div>
     );
