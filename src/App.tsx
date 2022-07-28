@@ -8,7 +8,6 @@ import ConnectModal from './components/modals/ConnectModal';
 import PostsBox from './components/home/PostsBox';
 import NoHandlerModal from './components/modals/NoHandlerModal';
 import MintNft from './components/home/MintNft';
-import MintNftModal from './components/modals/MintNftModal';
 
 export default function App() {
     const { isConnected } = useAccount();

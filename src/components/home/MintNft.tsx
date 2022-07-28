@@ -19,6 +19,7 @@ export default function MintNft() {
     const [isMinting, setIsMinting] = useState<any>(false);
 
     const mint = async () => {
+        if (!lensHandler) return;
         try {
             setMintModal(true);
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
@@ -83,6 +84,7 @@ export default function MintNft() {
                     </p>}
                 </div>
                 <button
+                    disabled={!lensHandler}
                     style={!lensHandler ? { opacity: 0.5 } : {}}
                     onClick={() => mint()}
                     className="koru-btn _pink inline-block"

@@ -81,8 +81,10 @@ export default function SendMessageBox() {
                 </div>
             </div>
             <div className="flex justify-end mt-10">
-                <button onClick={() => post()}
-                        className="koru-btn _primary w-44"
+                <button
+                    disabled={!lensHandler}
+                    onClick={() => post()}
+                    className="koru-btn _primary w-44"
                 >
                     Post
                 </button>
