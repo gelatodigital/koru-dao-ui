@@ -5,6 +5,7 @@ import { nftContract } from '../blockchain/nftContract.factory';
 import { GET_DEFAULT_PROFILES } from '../utils/utils';
 import { Signer } from 'ethers';
 import request from 'graphql-request';
+import { koruContract } from '../blockchain/koruContract.factory';
 
 const contextDefaultValues: any = {
     connectModal: true,
@@ -19,6 +20,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [connectModal, setConnectModal] = useState<boolean>(false);
     const [mintModal, setMintModal] = useState<boolean>(false);
 
+    const [lastPost, setLastPost] = useState<string | null>(null);
     const [nftID, setNftID] = useState<string | null>(null);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
@@ -26,16 +28,27 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const getNft = async () => {
         try {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
-            const tokenId = await contract.balanceOf(address, 0);
-            if (!tokenId) return;
-            const tokenUri = await contract.tokenURI(tokenId);
+            const tokenId = await contract.balanceOf(address);
 
-            if (tokenUri) {
-                setNftID(tokenUri);
+            if (tokenId.toString() !== '0') {
+                setNftID(tokenId.toString());
             }
         } catch (err) {
             setNftID(null);
             console.warn('No nft was found');
+        }
+    };
+
+    const getLastPost = async () => {
+        try {
+            const contract = koruContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const lastPost = await contract.lastPost(address);
+            if (lastPost) {
+                setLastPost(lastPost);
+            }
+
+        } catch (err) {
+            console.warn('No lastPost was found');
         }
     };
 
@@ -63,9 +76,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         getNft();
         fetchAndUpdateLensHandle();
+        getLastPost();
 
         const interval = setInterval(() => {
             getNft();
+            getLastPost();
         }, 10000);
 
         return () => clearInterval(interval);

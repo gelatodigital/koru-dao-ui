@@ -9,9 +9,8 @@ export default function MintNftModal(props: any) {
     const [isMinted, setIsMinted] = useState<any>(false);
 
     useEffect(() => {
-        console.log('reno', props);
         const interval = setInterval(() => {
-            console.log('minting');
+            console.log('Minting');
             if (nftId) {
                 setIsMinted(false);
             }

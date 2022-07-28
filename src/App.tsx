@@ -17,7 +17,7 @@ export default function App() {
     return (
         <div className="mx-auto container p-5 pb-20 relative">
             <Header />
-            <main className="text-center mt-6 lg:mt-20 md:w-[640px] mx-auto">
+            <main className="mt-6 lg:mt-20 md:w-[640px] mx-auto">
 
                 {isConnected && !nftID && <MintNft />}
 

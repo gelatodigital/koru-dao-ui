@@ -21,7 +21,6 @@ export default function MintNft() {
     const mint = async () => {
         try {
             setMintModal(true);
-            console.log(supportedChains[chain?.id as number].nft);
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             const { address: metaboxAddress, abi: metaboxAbi } =
                 GelatoRelaySDK.getMetaBoxAddressAndABI(chain?.id as number);
@@ -85,7 +84,6 @@ export default function MintNft() {
                 </div>
                 <button
                     style={!lensHandler ? { opacity: 0.5 } : {}}
-                    disabled={!lensHandler}
                     onClick={() => mint()}
                     className="koru-btn _pink inline-block"
                 >
