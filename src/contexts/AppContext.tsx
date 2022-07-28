@@ -24,7 +24,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [nftID, setNftID] = useState<string | null>(null);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
-    const [publications, setPublications] = useState<boolean>(false);
+    const [publications, setPublications] = useState<any[]>([]);
 
     const getNft = async () => {
         try {
@@ -117,6 +117,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 setNoLensModal,
                 mintModal,
                 setMintModal,
+                publications,
             }}
         >
             {children}

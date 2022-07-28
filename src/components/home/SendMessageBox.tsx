@@ -6,6 +6,8 @@ import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from
 import { ethers, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { koruContract } from '../../blockchain/koruContract.factory';
+import { v4 as uuid } from 'uuid';
+import uploadToIPFS from '../../utils/ipfs';
 
 export default function SendMessageBox() {
 
@@ -17,14 +19,44 @@ export default function SendMessageBox() {
 
     const { lensHandler }: any = useContext(AppContext);
 
-    const [isPosting, setIsPosting] = useState<any>(false);
+    const [userMessage, setUserMessage] = useState<null | string>(null);
+    const [isPosted, setIsPosted] = useState<any>(false);
     const [isGettingSignature, setIsGettingSignature] = useState<any>(false);
+
+    const uploadIpfs = async () => {
+        const ipfs = {
+            version: '1.0.0',
+            metadata_id: uuid(),
+            description: userMessage,
+            content: userMessage,
+            external_url: `${supportedChains[chain?.id as number].lensProfileUrl}${supportedChains[chain?.id as number].lensProfileId}`,
+            image: null,
+            imageMimeType: null,
+            name: `Post by @${supportedChains[chain?.id as number].lensHandle}`,
+            mainContentFocus: 'TEXT',
+            contentWarning: null,
+            attributes: [
+                {
+                    traitType: 'string',
+                    key: 'type',
+                    value: 'post',
+                },
+            ],
+            media: null,
+            createdOn: new Date(),
+            appId: 'Koru DAO',
+        };
+        debugger;
+        const { path } = await uploadToIPFS(ipfs);
+        return path;
+    };
 
     const post = async () => {
         try {
             setIsGettingSignature(true);
+            const ipfs = await uploadIpfs();
             const lensProfileId = supportedChains[chain?.id as number].lensProfileId;
-            const contentUri = "";
+            const contentUri = "https://ipfs.infura.io/ipfs/" + ipfs;
             const contentModule = supportedChains[chain?.id as number].freeCollectModule;
             const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
             const referenceModule = "0x0000000000000000000000000000000000000000";
@@ -64,8 +96,6 @@ export default function SendMessageBox() {
             const metaTxRequestData = GelatoRelaySDK.getMetaTxRequestWalletPayloadToSign(metaTxRequest);
             const userSignature = await signTypedDataAsync(metaTxRequestData);
 
-            setIsPosting(true);
-
             const resp = await fetch('https://relay-sponsor-backend.herokuapp.com/sponsor/sign', {
                 method: "POST",
                 headers: {
@@ -80,21 +110,22 @@ export default function SendMessageBox() {
 
             if (!resp.ok) {
                 throw 'Failed to post message';
+            } else {
+                setUserMessage(null);
+                setIsGettingSignature(false);
+                setIsPosted(true);
             }
 
         } catch (e) {
             console.warn('Failed to post message', e);
             setIsGettingSignature(false);
-            setIsPosting(false);
-        } finally {
-            setIsGettingSignature(false);
-            setIsPosting(false);
+            setIsPosted(false);
         }
     };
 
     return (
         <div>
-            <div className="koru-box mt-6 lg:mt-10 p-10">
+            <div className="koru-box mt-6 lg:mt-10 p-10 min-h-[200px]">
                 <div className="flex gap-4">
                     <UiIcon icon="logo-pic" classes="w-12 h-12" />
                     <div className="text-left w-full">
@@ -104,12 +135,16 @@ export default function SendMessageBox() {
                         <p className="koru-gradient-text-1 inline-block font-medium">
                             @Koru DAO
                         </p>
-                        <textarea
-                            disabled={!lensHandler}
-                            rows={4}
-                            className="w-full p-4 mt-4 min-h-[100px]"
-                            placeholder="Hello, world!"
-                        />
+                        {!isPosted ?
+                            <textarea
+                                onChange={(e) => setUserMessage(e.target.value)}
+                                disabled={!lensHandler}
+                                rows={4}
+                                className="w-full p-4 mt-4 min-h-[100px]"
+                                placeholder="Hello, world!"
+                            /> :
+                            <div className="text-center mt-8 font-bold">Your post is being processed.</div>
+                        }
                     </div>
                 </div>
             </div>
