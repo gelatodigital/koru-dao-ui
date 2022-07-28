@@ -23,8 +23,8 @@ export default function SendMessageBox() {
     const post = async () => {
         try {
             setIsGettingSignature(true);
-            const lensProfileId = lensHandler?.id;
-            const contentUri = "Hello";
+            const lensProfileId = supportedChains[chain?.id as number].lensProfileId;
+            const contentUri = "";
             const contentModule = supportedChains[chain?.id as number].freeCollectModule;
             const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
             const referenceModule = "0x0000000000000000000000000000000000000000";

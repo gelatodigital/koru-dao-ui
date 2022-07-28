@@ -222,7 +222,7 @@ export const GET_DEFAULT_PROFILES = gql`
 `;
 
 export const GET_PUBLICATIONS = gql`
-  query($request: PublicationsQueryRequest!) {
+query($request: PublicationsQueryRequest!) {
     publications(request: $request) {
       items {
         __typename 
@@ -243,12 +243,10 @@ export const GET_PUBLICATIONS = gql`
       }
     }
   }
-
   fragment MediaFields on Media {
     url
     mimeType
   }
-
   fragment ProfileFields on Profile {
     id
     name
@@ -259,9 +257,9 @@ export const GET_PUBLICATIONS = gql`
       key
       value
     }
-        isFollowedByMe
+    isFollowedByMe
     isFollowing(who: null)
-        followNftAddress
+    followNftAddress
     metadata
     isDefault
     handle
@@ -319,20 +317,18 @@ export const GET_PUBLICATIONS = gql`
         recipient
       }
       ... on ProfileFollowModuleSettings {
-       type
+        type
       }
       ... on RevertFollowModuleSettings {
-       type
+        type
       }
     }
   }
-
   fragment PublicationStatsFields on PublicationStats { 
     totalAmountOfMirrors
     totalAmountOfCollects
     totalAmountOfComments
   }
-
   fragment MetadataOutputFields on MetadataOutput {
     name
     description
@@ -348,18 +344,18 @@ export const GET_PUBLICATIONS = gql`
       value
     }
   }
-
   fragment Erc20Fields on Erc20 {
     name
     symbol
     decimals
     address
   }
-
   fragment CollectModuleFields on CollectModule {
     __typename
-    ... on EmptyCollectModuleSettings {
+    ... on FreeCollectModuleSettings {
       type
+      followerOnly
+      contractAddress
     }
     ... on FeeCollectModuleSettings {
       type
@@ -413,7 +409,6 @@ export const GET_PUBLICATIONS = gql`
       endTimestamp
     }
   }
-
   fragment PostFields on Post {
     id
     profile {
@@ -435,12 +430,11 @@ export const GET_PUBLICATIONS = gql`
       }
     }
     appId
-        hidden
-        reaction(request: null)
-    mirrors(profileId: null)
+    hidden
+    reaction(request: null)
+    mirrors(by: null)
     hasCollectedByMe
   }
-
   fragment MirrorBaseFields on Mirror {
     id
     profile {
@@ -462,11 +456,10 @@ export const GET_PUBLICATIONS = gql`
       }
     }
     appId
-        hidden
-        reaction(request: null)
+    hidden
+    reaction(request: null)
     hasCollectedByMe
   }
-
   fragment MirrorFields on Mirror {
     ...MirrorBaseFields
     mirrorOf {
@@ -478,7 +471,6 @@ export const GET_PUBLICATIONS = gql`
      }
     }
   }
-
   fragment CommentBaseFields on Comment {
     id
     profile {
@@ -500,12 +492,11 @@ export const GET_PUBLICATIONS = gql`
       }
     }
     appId
-        hidden
-        reaction(request: null)
-    mirrors(profileId: null)
+    hidden
+    reaction(request: null)
+    mirrors(by: null)
     hasCollectedByMe
   }
-
   fragment CommentFields on Comment {
     ...CommentBaseFields
     mainPost {
@@ -525,7 +516,6 @@ export const GET_PUBLICATIONS = gql`
       }
     }
   }
-
   fragment CommentMirrorOfFields on Comment {
     ...CommentBaseFields
     mainPost {
@@ -537,13 +527,4 @@ export const GET_PUBLICATIONS = gql`
       }
     }
   }
-`
-
-// export const getPublications = (getPublicationQuery) => {
-//     return apolloClient.query({
-//         query: gql(GET_PUBLICATIONS),
-//         variables: {
-//             request: getPublicationQuery
-//         },
-//     })
-// }
+`;

@@ -24,6 +24,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [nftID, setNftID] = useState<string | null>(null);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
+    const [publications, setPublications] = useState<boolean>(false);
 
     const getNft = async () => {
         try {
@@ -72,15 +73,15 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const fetchPosts = async () => {
         try {
-            const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_PUBLICATIONS, {
-                request: {
-                    ethereumAddress: address?.toLowerCase(),
-                },
+            const query = {
+                "profileId": supportedChains[chain?.id as number]?.lensProfileId,
+                "publicationTypes": ["POST", "COMMENT", "MIRROR"],
+            };
+            const { publications } = await request(supportedChains[chain?.id as number].lensUrl, GET_PUBLICATIONS, {
+                request: query,
             });
-            setLensHandler(defaultProfile);
-            if (!defaultProfile) {
-                setNoLensModal(true);
-            }
+
+            setPublications(publications?.items);
         } catch (err) {
             setNoLensModal(true);
             console.warn('No lens handler was found');
@@ -92,11 +93,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             return;
         }
 
+        fetchPosts();
         getNft();
         fetchAndUpdateLensHandle();
         getLastPost();
 
         const interval = setInterval(() => {
+            fetchPosts();
             getNft();
             getLastPost();
         }, 10000);
