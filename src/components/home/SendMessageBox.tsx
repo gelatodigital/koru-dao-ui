@@ -18,8 +18,7 @@ export default function SendMessageBox() {
     const lensProfileId = lensHandler?.handle;
     const contentUri = "Hello";
     const contentModule = "0x23b9467334bEb345aAa6fd1545538F3d54436e96";
-    const collectModuleInitData =
-        "0x0000000000000000000000000000000000000000000000000000000000000000";
+    const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
     const referenceModule = "0x0000000000000000000000000000000000000000";
     const referenceModuleInitData = "0x";
 
