@@ -83,7 +83,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
             setPublications(publications?.items);
         } catch (err) {
-            setNoLensModal(true);
             console.warn('No lens handler was found');
         }
     };
