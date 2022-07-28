@@ -42,7 +42,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const getLastPost = async () => {
         try {
-            const contract = koruContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const contract = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
             const lastPost = await contract.lastPost(address);
             if (lastPost) {
                 setLastPost(lastPost);
