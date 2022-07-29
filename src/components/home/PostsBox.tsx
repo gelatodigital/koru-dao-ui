@@ -12,13 +12,18 @@ export default function PostsBox() {
                 Posts
             </h3>
             <div className="mt-10 rounded-2xl">
-                <ul className='flex flex-col gap-6'>
+                <ul className="flex flex-col gap-6">
                     {publications?.map((publication: any) => (
                         <li
                             key={publication.id}
                         >
-                            <KoruBox content={
-                                <p className="mt-4">{`${publication.metadata.content}`}</p>} />
+                            <KoruBox
+                                content={
+                                    <p className="mt-4">{`${publication.metadata.content}`}</p>
+                                }
+                                timestamp={new Date(publication.createdAt).getTime()}
+                                publication={publication}
+                            />
                         </li>
                     ))}
                 </ul>

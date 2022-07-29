@@ -31,7 +31,7 @@ export default function SendMessageBox() {
             metadata_id: uuid(),
             description: userMessage,
             content: userMessage,
-            external_url: `${supportedChains[chain?.id as number].lensProfileUrl}${supportedChains[chain?.id as number].lensProfileId}`,
+            external_url: `${supportedChains[chain?.id as number].lensProfileUrl}${supportedChains[chain?.id as number].lensHandle}`,
             image: null,
             imageMimeType: null,
             name: `Post by @${supportedChains[chain?.id as number].lensHandle}`,

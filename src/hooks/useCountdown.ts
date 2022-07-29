@@ -9,12 +9,16 @@ const getReturnValues = (countDown: any) => {
     return [days, hours, minutes, seconds];
 };
 
-const useCountdown = (date: any) => {
+const useCountdown = (date: any, direction?: 'up' | 'down') => {
     const [countDown, setCountDown] = useState(date - new Date().getTime());
 
     useEffect(() => {
+        const _t = direction === 'up' ? new Date().getTime() - date : date - new Date().getTime();
+        setCountDown(_t);
+
         const interval = setInterval(() => {
-            setCountDown(date - new Date().getTime());
+            const _t = direction === 'up' ? new Date().getTime() - date : date - new Date().getTime();
+            setCountDown(_t);
         }, 1000);
 
         // When unmounted will clear the interval
