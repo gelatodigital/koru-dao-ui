@@ -8,6 +8,8 @@ import { supportedChains } from '../../blockchain/constants';
 import { koruContract } from '../../blockchain/koruContract.factory';
 import { v4 as uuid } from 'uuid';
 import uploadToIPFS from '../../utils/ipfs';
+// @ts-ignore
+import CircularProgress from '../../utils/circularProgress';
 
 export default function SendMessageBox() {
 
@@ -19,7 +21,7 @@ export default function SendMessageBox() {
 
     const { lensHandler }: any = useContext(AppContext);
 
-    const [userMessage, setUserMessage] = useState<null | string>(null);
+    const [userMessage, setUserMessage] = useState<string>('');
     const [isPosted, setIsPosted] = useState<any>(false);
     const [isGettingSignature, setIsGettingSignature] = useState<any>(false);
 
@@ -111,7 +113,7 @@ export default function SendMessageBox() {
             if (!resp.ok) {
                 throw 'Failed to post message';
             } else {
-                setUserMessage(null);
+                setUserMessage('');
                 setIsGettingSignature(false);
                 setIsPosted(true);
             }
@@ -148,11 +150,21 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-end mt-10">
+            <div className="flex justify-end mt-10 items-center gap-4 ">
+
+                <div>
+                    <CircularProgress
+                        size={25}
+                        strokeWidth={2}
+                        percentage={parseInt(String((userMessage.length * 100) / 280))}
+                        color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
+                    />
+                </div>
+
                 {!isPosted && <button
-                  disabled={!lensHandler || isGettingSignature}
+                  disabled={!lensHandler || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                   onClick={() => post()}
-                  className="koru-btn _primary w-44 flex items-center gap-4 justify-center"
+                  className={`koru-btn _primary w-44 flex items-center gap-4 justify-center ${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'opacity-20' : ''}`}
                 >
                     {isGettingSignature ? <UiIcon icon={'loading'} classes="w-6 h-6" /> : 'Post'}
                 </button>

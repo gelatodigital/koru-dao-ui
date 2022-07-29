@@ -13,7 +13,7 @@ export default function PostsBox() {
             </h3>
             <div className="mt-10 rounded-2xl">
                 <ul className='flex flex-col gap-6'>
-                    {publications.map((publication: any) => (
+                    {publications?.map((publication: any) => (
                         <li
                             key={publication.id}
                         >

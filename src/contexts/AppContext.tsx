@@ -44,8 +44,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         try {
             const contract = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
             const lastPost = await contract.lastPost(address);
+            const postInterval = await contract.postInterval();
+            console.log(lastPost.toString());
             if (lastPost) {
-                setLastPost(lastPost);
+                setLastPost(lastPost.toString());
             }
 
         } catch (err) {
@@ -53,7 +55,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const fetchAndUpdateLensHandle = async () => {
+    const getWalletLensHandle = async () => {
         try {
             const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_DEFAULT_PROFILES, {
                 request: {
@@ -71,35 +73,43 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     };
 
 
-    const fetchPosts = async () => {
+    const getAllPosts = async () => {
         try {
             const query = {
-                "profileId": supportedChains[chain?.id as number]?.lensProfileId,
+                "profileId": supportedChains[chain?.id as number ?? 137]?.lensProfileId,
                 "publicationTypes": ["POST", "COMMENT", "MIRROR"],
             };
-            const { publications } = await request(supportedChains[chain?.id as number].lensUrl, GET_PUBLICATIONS, {
+            const { publications } = await request(supportedChains[chain?.id as number ?? 137].lensUrl, GET_PUBLICATIONS, {
                 request: query,
             });
 
             setPublications(publications?.items);
         } catch (err) {
-            console.warn('No lens handler was found');
+            console.warn('No posts were found');
         }
     };
+
+
+    useEffect(() => {
+        getAllPosts();
+        const interval = setInterval(() => {
+            getAllPosts();
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [address, isConnected, chain, signer]);
+
 
     useEffect(() => {
         if (!signer || !isConnected || !address || !supportedChains[chain?.id as number]?.nft) {
             return;
         }
 
-        fetchPosts();
         getNft();
-        fetchAndUpdateLensHandle();
+        getWalletLensHandle();
         getLastPost();
 
         const interval = setInterval(() => {
-            fetchPosts();
-            getNft();
             getLastPost();
         }, 10000);
 
