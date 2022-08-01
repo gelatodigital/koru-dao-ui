@@ -19,7 +19,7 @@ export default function SendMessageBox() {
     const { data: signer } = useSigner();
     const { signTypedDataAsync } = useSignTypedData();
 
-    const { lensHandler }: any = useContext(AppContext);
+    const { lensHandler, publications, setPublications, canUserPost }: any = useContext(AppContext);
 
     const [userMessage, setUserMessage] = useState<string>('');
     const [isPosted, setIsPosted] = useState<any>(false);
@@ -51,6 +51,28 @@ export default function SendMessageBox() {
         debugger;
         const { path } = await uploadToIPFS(ipfs);
         return path;
+    };
+
+    const addPostToPublications = () => {
+        const _p = {
+            id: '0x4252-0xxx',
+            profile: {
+                stats: {
+                    totalComments: 0,
+                    totalMirrors: 0,
+                    totalCollects: 0,
+                },
+            },
+            stats: {
+                totalAmountOfMirrors: 0,
+                totalAmountOfCollects: 0,
+                totalAmountOfComments: 0,
+            },
+            metadata: {
+                content: userMessage,
+            },
+        };
+        setPublications([_p, ...publications]);
     };
 
     const post = async () => {
@@ -113,6 +135,7 @@ export default function SendMessageBox() {
             if (!resp.ok) {
                 throw 'Failed to post message';
             } else {
+                // addPostToPublications(); // has to be improved for new messages do not overwrite
                 setUserMessage('');
                 setIsGettingSignature(false);
                 setIsPosted(true);
@@ -140,7 +163,7 @@ export default function SendMessageBox() {
                         {!isPosted ?
                             <textarea
                                 onChange={(e) => setUserMessage(e.target.value)}
-                                disabled={!lensHandler}
+                                disabled={!canUserPost || chain?.id === 137 && !lensHandler || isGettingSignature}
                                 rows={4}
                                 className="w-full p-4 mt-4 min-h-[100px]"
                                 placeholder="Hello, world!"
@@ -150,26 +173,22 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            <div className="flex justify-end mt-10 items-center gap-4 ">
-
-                <div>
-                    <CircularProgress
-                        size={25}
-                        strokeWidth={2}
-                        percentage={parseInt(String((userMessage.length * 100) / 280))}
-                        color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
-                    />
-                </div>
-
-                {!isPosted && <button
-                  disabled={!lensHandler || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+            {!isPosted && <div className="flex justify-end mt-10 items-center gap-4">
+                <CircularProgress
+                  size={25}
+                  strokeWidth={2}
+                  percentage={parseInt(String((userMessage.length * 100) / 280))}
+                  color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
+                />
+                <button
+                  disabled={!canUserPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                   onClick={() => post()}
                   className={`koru-btn _primary w-44 flex items-center gap-4 justify-center ${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'opacity-20' : ''}`}
                 >
                     {isGettingSignature ? <UiIcon icon={'loading'} classes="w-6 h-6" /> : 'Post'}
                 </button>
-                }
             </div>
+            }
         </div>
     );
 };

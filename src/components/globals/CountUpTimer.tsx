@@ -11,7 +11,7 @@ const CountUpTimer = ({ timestamp }: { timestamp: number }) => {
 
                 {days < 1 && hours > 0 ? `${hours} hours ` : null}
 
-                {days < 1 && hours < 1 && minutes > 0 ? `${minutes} minutes ` : null}
+                {days < 1 && hours < 1 && minutes > 0 ? `${minutes} ${minutes > 1 ? 'minutes' : 'minute'} ` : null}
 
                 {hours < 1 && minutes < 1 &&
                   <span>

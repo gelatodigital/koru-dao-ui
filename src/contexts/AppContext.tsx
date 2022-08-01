@@ -31,14 +31,14 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const getNft = async () => {
         try {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            if (!contract.signer.getAddress) return;
             const tokenId = await contract.balanceOf(address);
 
-            if (tokenId.toString() !== '0') {
-                setNftID(tokenId.toString());
-            }
+            setNftID(tokenId.toString() && tokenId.toString() !== '0');
         } catch (err) {
             setNftID(null);
             console.warn('No nft was found');
+            console.warn(err);
         }
     };
 
@@ -52,7 +52,6 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 const _interval = Number(postInterval.toString()) * 1000;
                 setCanUserPost(Date.now() >= (_last + _interval));
             }
-
         } catch (err) {
             console.warn('No lastPost was found');
         }
@@ -147,6 +146,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 mintModal,
                 setMintModal,
                 publications,
+                setPublications,
                 canUserPost,
                 totalNftMinted,
                 totalNftSupply,
