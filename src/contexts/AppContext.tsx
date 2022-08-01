@@ -83,15 +83,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 },
             });
             setLensHandler(defaultProfile);
-            if (!defaultProfile) {
-                setNoLensModal(true);
-            }
+            setNoLensModal(chain?.id === 137 && !defaultProfile);
         } catch (err) {
             setNoLensModal(true);
             console.warn('No lens handler was found');
         }
     };
-
 
     const getAllPosts = async () => {
         try {

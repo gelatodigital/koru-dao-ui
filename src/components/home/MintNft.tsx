@@ -19,7 +19,7 @@ export default function MintNft() {
     const [isMinting, setIsMinting] = useState<any>(false);
 
     const mint = async () => {
-        if (!lensHandler) return;
+        if (chain?.id === 137 && !lensHandler) return;
         try {
             setMintModal(true);
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
@@ -72,20 +72,23 @@ export default function MintNft() {
     return (
         <div className="koru-bg-primary px-6 py-4 rounded-2xl">
             <div className="flex items-center gap-4 justify-between flex-col lg:flex-row">
-                <figure className="w-14 shrink-0">
-                    <img alt="Nft" src="/images/nft.png" className="rounded-full inline-block" />
-                </figure>
-                <div className="text-center lg:text-left">
-                    <p className="font-bold text-lg koru-gradient-text-3">
-                        {totalNftMinted}/ {totalNftSupply} Koru DAO NFTs available
-                    </p>
-                    {!lensHandler && <p className="text-red-600 text-sm block">
-                        You must have a Lens handle to mint.
-                    </p>}
+                <div className='flex items-center gap-6'>
+                    <figure className="w-14 shrink-0">
+                        <img alt="Nft" src="/images/nft.png" className="rounded-full inline-block" />
+                    </figure>
+                    <div className="text-center lg:text-left">
+                        <p className="font-bold text-lg koru-gradient-text-3">
+                            {chain?.id === 137 && <span>{totalNftMinted}/ {totalNftSupply} </span>}
+                            Koru DAO NFTs available
+                        </p>
+                        {chain?.id === 137 && !lensHandler && <p className="text-red-600 text-sm block">
+                            You must have a Lens handle to mint.
+                        </p>}
+                    </div>
                 </div>
                 <button
-                    disabled={!lensHandler}
-                    style={!lensHandler ? { opacity: 0.5 } : {}}
+                    disabled={chain?.id === 137 && !lensHandler}
+                    style={chain?.id === 137 && !lensHandler ? { opacity: 0.5 } : {}}
                     onClick={() => mint()}
                     className="koru-btn _pink inline-block"
                 >
