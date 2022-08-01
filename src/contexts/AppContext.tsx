@@ -23,7 +23,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [totalNftMinted, setTotalNftMinted] = useState<number>(0);
     const [totalNftSupply, setTotalNftSupply] = useState<number>(0);
     const [canUserPost, setCanUserPost] = useState<boolean>(false);
-    const [nftID, setNftID] = useState<string | null>(null);
+    const [nftId, setnftId] = useState<boolean | null>(true);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
     const [publications, setPublications] = useState<any[]>([]);
@@ -33,10 +33,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             if (!contract.signer.getAddress) return;
             const tokenId = await contract.balanceOf(address);
-
-            setNftID(tokenId.toString() && tokenId.toString() !== '0');
+            setnftId(tokenId.toString() && tokenId.toString() !== '0');
         } catch (err) {
-            setNftID(null);
+            setnftId(null);
             console.warn('No nft was found');
             console.warn(err);
         }
@@ -127,6 +126,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         getLastPost();
 
         const interval = setInterval(() => {
+            getNft();
             getLastPost();
             nftAmountLeft();
         }, 10000);
@@ -139,7 +139,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 connectModal,
                 setConnectModal,
-                nftID,
+                nftId,
                 lensHandler,
                 noLensModal,
                 setNoLensModal,

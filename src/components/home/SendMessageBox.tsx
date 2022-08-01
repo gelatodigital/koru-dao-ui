@@ -19,7 +19,7 @@ export default function SendMessageBox() {
     const { data: signer } = useSigner();
     const { signTypedDataAsync } = useSignTypedData();
 
-    const { lensHandler, publications, setPublications, canUserPost }: any = useContext(AppContext);
+    const { lensHandler, publications, setPublications, canUserPost, nftId }: any = useContext(AppContext);
 
     const [userMessage, setUserMessage] = useState<string>('');
     const [isPosted, setIsPosted] = useState<any>(false);
@@ -163,7 +163,7 @@ export default function SendMessageBox() {
                         {!isPosted ?
                             <textarea
                                 onChange={(e) => setUserMessage(e.target.value)}
-                                disabled={!canUserPost || chain?.id === 137 && !lensHandler || isGettingSignature}
+                                disabled={!nftId || !canUserPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                                 rows={4}
                                 className="w-full p-4 mt-4 min-h-[100px]"
                                 placeholder="Hello, world!"
@@ -181,7 +181,7 @@ export default function SendMessageBox() {
                   color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
                 />
                 <button
-                  disabled={!canUserPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                  disabled={!nftId || !canUserPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                   onClick={() => post()}
                   className={`koru-btn _primary w-44 flex items-center gap-4 justify-center ${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'opacity-20' : ''}`}
                 >

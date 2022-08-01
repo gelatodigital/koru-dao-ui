@@ -11,14 +11,14 @@ import MintNft from './components/home/MintNft';
 
 export default function App() {
     const { isConnected } = useAccount();
-    const { connectModal, lensHandler, noLensModal, mintModal, nftID } = useContext(AppContext);
+    const { connectModal, lensHandler, noLensModal, mintModal, nftId } = useContext(AppContext);
 
     return (
         <div className="mx-auto container p-5 pb-20 relative">
             <Header />
             <main className="mt-6 lg:mt-20 md:w-[640px] mx-auto">
 
-                {isConnected && !nftID && <MintNft />}
+                {isConnected && !nftId && <MintNft />}
 
                 <SendMessageBox />
                 <PostsBox />
