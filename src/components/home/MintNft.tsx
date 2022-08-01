@@ -9,7 +9,7 @@ import MintNftModal from '../modals/MintNftModal';
 
 export default function MintNft() {
 
-    const { lensHandler, setMintModal, mintModal } = useContext(AppContext);
+    const { lensHandler, setMintModal, mintModal, totalNftMinted, totalNftSupply } = useContext(AppContext);
     const { address } = useAccount();
     const { chain } = useNetwork();
     const { signTypedDataAsync } = useSignTypedData();
@@ -77,7 +77,7 @@ export default function MintNft() {
                 </figure>
                 <div className="text-center lg:text-left">
                     <p className="font-bold text-lg koru-gradient-text-3">
-                        100/ 1000 Koru DAO NFTs available
+                        {totalNftMinted}/ {totalNftSupply} Koru DAO NFTs available
                     </p>
                     {!lensHandler && <p className="text-red-600 text-sm block">
                         You must have a Lens handle to mint.

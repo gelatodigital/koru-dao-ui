@@ -20,7 +20,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [connectModal, setConnectModal] = useState<boolean>(false);
     const [mintModal, setMintModal] = useState<boolean>(false);
 
-    const [lastPost, setLastPost] = useState<string | null>(null);
+    const [totalNftMinted, setTotalNftMinted] = useState<number>(0);
+    const [totalNftSupply, setTotalNftSupply] = useState<number>(0);
+    const [canUserPost, setCanUserPost] = useState<boolean>(false);
     const [nftID, setNftID] = useState<string | null>(null);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
@@ -45,13 +47,31 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             const contract = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
             const lastPost = await contract.lastPost(address);
             const postInterval = await contract.postInterval();
-            console.log(lastPost.toString());
-            if (lastPost) {
-                setLastPost(lastPost.toString());
+            if (lastPost && postInterval) {
+                const _last = Number(lastPost.toString()) * 1000;
+                const _interval = Number(postInterval.toString()) * 1000;
+                setCanUserPost(Date.now() >= (_last + _interval));
             }
 
         } catch (err) {
             console.warn('No lastPost was found');
+        }
+    };
+
+    const nftAmountLeft = async () => {
+        try {
+            const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const totalSupply = await contract.totalSupply();
+            const maxSupply = await contract.maxSupply();
+
+            if (totalSupply) {
+                setTotalNftMinted(totalSupply.toString());
+            }
+            if (maxSupply) {
+                setTotalNftSupply(maxSupply.toString());
+            }
+        } catch (err) {
+            console.warn('No total supply was found');
         }
     };
 
@@ -106,11 +126,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
 
         getNft();
+        nftAmountLeft();
         getWalletLensHandle();
         getLastPost();
 
         const interval = setInterval(() => {
             getLastPost();
+            nftAmountLeft();
         }, 10000);
 
         return () => clearInterval(interval);
@@ -128,6 +150,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 mintModal,
                 setMintModal,
                 publications,
+                canUserPost,
+                totalNftMinted,
+                totalNftSupply,
             }}
         >
             {children}

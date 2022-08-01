@@ -2,6 +2,25 @@ import UiIcon from './UiIcon';
 import { CountUpTimer } from './CountUpTimer';
 
 export function KoruBox(props: any) {
+
+    const statsMap: any = [
+        {
+            key: 'totalAmountOfComments',
+            icon: 'comment',
+            color: '#4085F3',
+        },
+        {
+            key: 'totalAmountOfMirrors',
+            icon: 'mirror',
+            color: '#8B62F3',
+        },
+        {
+            key: 'totalAmountOfCollects',
+            icon: 'collect',
+            color: '#ED4649',
+        },
+    ];
+
     return (
         <div className="koru-box !p-6">
             <div className="flex gap-4">
@@ -24,10 +43,13 @@ export function KoruBox(props: any) {
                         {props.content}
                     </div>
                     <div>
-                        <ul>
-                            {Object.keys(props.publication.stats).map((key: string) => (
-                                <li key={key}>
-                                    {key}: {props.publication.stats[key]}
+                        <ul className="flex gap-8 mt-6">
+                            {statsMap.map((stat: any) => (
+                                <li key={stat.key}
+                                    className="flex gap-2 text-sm"
+                                    style={{ color: stat.color }}
+                                >
+                                    <UiIcon icon={stat.icon} classes="w-5 h-5" /> {props.publication.stats[stat.key]}
                                 </li>
                             ))}
                         </ul>
