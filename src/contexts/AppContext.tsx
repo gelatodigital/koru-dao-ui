@@ -1,11 +1,11 @@
 import React, { createContext, ReactNode, useEffect, useState } from 'react';
 import { supportedChains } from '../blockchain/constants';
 import { useAccount, useNetwork, useSigner } from 'wagmi';
-import { nftContract } from '../blockchain/nftContract.factory';
+import { nftContract } from '../blockchain/contracts/nftContract.factory';
 import { GET_DEFAULT_PROFILES, GET_PUBLICATIONS } from '../utils/utils';
 import { Signer } from 'ethers';
 import request from 'graphql-request';
-import { koruContract } from '../blockchain/koruContract.factory';
+import { koruContract } from '../blockchain/contracts/koruContract.factory';
 
 const contextDefaultValues: any = {
     connectModal: true,
@@ -22,11 +22,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const [totalNftMinted, setTotalNftMinted] = useState<number>(0);
     const [totalNftSupply, setTotalNftSupply] = useState<number>(0);
-    const [canUserPost, setCanUserPost] = useState<boolean>(false);
     const [nftId, setnftId] = useState<boolean | null>(true);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
     const [publications, setPublications] = useState<any[]>([]);
+
+    const [canUserPost, setCanUserPost] = useState<boolean>(false);
+    const [userPost, setUserPost] = useState<{ [key: string]: any }>({
+        lastPost: null,
+        postInterval: null,
+    });
 
     const getNft = async () => {
         try {
@@ -49,6 +54,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             if (lastPost && postInterval) {
                 const _last = Number(lastPost.toString()) * 1000;
                 const _interval = Number(postInterval.toString()) * 1000;
+                setUserPost(
+                    {
+                        lastPost: _last,
+                        postInterval: _interval,
+                        canPost: Date.now() >= (_last + _interval),
+                    },
+                );
                 setCanUserPost(Date.now() >= (_last + _interval));
             }
         } catch (err) {
@@ -150,6 +162,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 canUserPost,
                 totalNftMinted,
                 totalNftSupply,
+                userPost,
             }}
         >
             {children}

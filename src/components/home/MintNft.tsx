@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { nftContract } from '../../blockchain/nftContract.factory';
+import { nftContract } from '../../blockchain/contracts/nftContract.factory';
 import { supportedChains } from '../../blockchain/constants';
 import { ethers, Signer } from 'ethers';
 import { GelatoRelaySDK } from '@gelatonetwork/gelato-relay-sdk';

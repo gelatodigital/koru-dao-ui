@@ -11,7 +11,7 @@ import MintNft from './components/home/MintNft';
 
 export default function App() {
     const { isConnected } = useAccount();
-    const { connectModal, lensHandler, noLensModal, mintModal, nftId } = useContext(AppContext);
+    const { connectModal, lensHandler, noLensModal, nftId } = useContext(AppContext);
 
     return (
         <div className="mx-auto container p-5 pb-20 relative">

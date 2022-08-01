@@ -5,11 +5,12 @@ import { GelatoRelaySDK } from '@gelatonetwork/gelato-relay-sdk';
 import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
 import { ethers, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
-import { koruContract } from '../../blockchain/koruContract.factory';
+import { koruContract } from '../../blockchain/contracts/koruContract.factory';
 import { v4 as uuid } from 'uuid';
 import uploadToIPFS from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
+import { CountTimer } from '../globals/CountTimer';
 
 export default function SendMessageBox() {
 
@@ -19,7 +20,7 @@ export default function SendMessageBox() {
     const { data: signer } = useSigner();
     const { signTypedDataAsync } = useSignTypedData();
 
-    const { lensHandler, publications, setPublications, canUserPost, nftId }: any = useContext(AppContext);
+    const { lensHandler, publications, setPublications, userPost, nftId }: any = useContext(AppContext);
 
     const [userMessage, setUserMessage] = useState<string>('');
     const [isPosted, setIsPosted] = useState<any>(false);
@@ -48,7 +49,6 @@ export default function SendMessageBox() {
             createdOn: new Date(),
             appId: 'Koru DAO',
         };
-        debugger;
         const { path } = await uploadToIPFS(ipfs);
         return path;
     };
@@ -163,7 +163,7 @@ export default function SendMessageBox() {
                         {!isPosted ?
                             <textarea
                                 onChange={(e) => setUserMessage(e.target.value)}
-                                disabled={!nftId || !canUserPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                                disabled={!nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                                 rows={4}
                                 className="w-full p-4 mt-4 min-h-[100px]"
                                 placeholder="Hello, world!"
@@ -173,7 +173,26 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            {!isPosted && <div className="flex justify-end mt-10 items-center gap-4">
+            {!isPosted && <div className="flex justify-end mt-10 items-center gap-6">
+
+                <div className="text-sm opacity-30">
+                    {userPost.canPost ?
+                        <div>
+                            {userPost.lastPost === 0 ?
+                                nftId ? <p>Go ahead and publish your first post!</p>
+                                    : <p>You need first to mint a NFT to publish your first post!</p>
+                                :
+                                <p>Your last post was <CountTimer timestamp={userPost.lastPost} /> ago.</p>
+                            }
+                        </div>
+                        :
+                        <div>
+                            You can post again in <CountTimer direction={'down'}
+                                                              timestamp={userPost.lastPost + userPost.postInterval} />.
+                        </div>
+                    }
+                </div>
+
                 <CircularProgress
                   size={25}
                   strokeWidth={2}
@@ -181,7 +200,7 @@ export default function SendMessageBox() {
                   color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
                 />
                 <button
-                  disabled={!nftId || !canUserPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                  disabled={!nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                   onClick={() => post()}
                   className={`koru-btn _primary w-44 flex items-center gap-4 justify-center ${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'opacity-20' : ''}`}
                 >

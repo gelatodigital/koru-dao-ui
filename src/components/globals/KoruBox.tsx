@@ -1,5 +1,5 @@
 import UiIcon from './UiIcon';
-import { CountUpTimer } from './CountUpTimer';
+import { CountTimer } from './CountTimer';
 
 export function KoruBox(props: any) {
 
@@ -35,9 +35,9 @@ export function KoruBox(props: any) {
                                 @Koru DAO
                             </p>
                         </div>
-                        <p className="text-sm opacity-40">
-                            <CountUpTimer timestamp={props.timestamp} /> ago
-                        </p>
+                        <div className="text-sm opacity-40">
+                            <CountTimer timestamp={props.timestamp} /> ago
+                        </div>
                     </div>
                     <div>
                         {props.content}

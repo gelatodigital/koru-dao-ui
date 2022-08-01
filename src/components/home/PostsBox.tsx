@@ -4,7 +4,7 @@ import { KoruBox } from '../globals/KoruBox';
 
 export default function PostsBox() {
 
-    const { publications, canUserPost }: any = useContext(AppContext);
+    const { publications }: any = useContext(AppContext);
 
     return (
         <div className="mt-20">
