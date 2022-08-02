@@ -8,17 +8,27 @@ import ConnectModal from './components/modals/ConnectModal';
 import PostsBox from './components/home/PostsBox';
 import NoHandlerModal from './components/modals/NoHandlerModal';
 import MintNft from './components/home/MintNft';
+import BuyNft from './components/home/BuyNft';
 
 export default function App() {
     const { isConnected } = useAccount();
-    const { connectModal, lensHandler, noLensModal, nftId } = useContext(AppContext);
+    const { connectModal, lensHandler, noLensModal, nftId, totalNftMinted, totalNftSupply } = useContext(AppContext);
 
     return (
         <div className="mx-auto container p-5 pb-20 relative">
             <Header />
             <main className="mt-6 lg:mt-20 md:w-[640px] mx-auto">
 
-                {isConnected && !nftId && <MintNft />}
+                {isConnected && !nftId &&
+                  <>
+                      {
+                          totalNftMinted === totalNftSupply ?
+                              <BuyNft />
+                              :
+                              <MintNft />
+                      }
+                  </>
+                }
 
                 <SendMessageBox />
                 <PostsBox />

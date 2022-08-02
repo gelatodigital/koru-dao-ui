@@ -173,14 +173,14 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            {!isPosted && <div className="flex justify-end mt-10 items-center gap-6">
+            {address && !isPosted && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
                     {userPost.canPost ?
                         <div>
                             {userPost.lastPost === 0 ?
                                 nftId ? <p>Go ahead and publish your first post!</p>
-                                    : <p>You need first to mint a NFT to publish your first post!</p>
+                                    : <p>You need to mint a NFT to publish your first post!</p>
                                 :
                                 <p>Your last post was <CountTimer timestamp={userPost.lastPost} /> ago.</p>
                             }
