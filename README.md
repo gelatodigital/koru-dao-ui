@@ -4,7 +4,7 @@ Koru DAO
 
 # How Koru DAO works ?
 
-Koru uses Gelato Relay SDK to enable its users to mint a NFT and and post messages on Lens without haveing to pay for
+Koru uses Gelato Relay SDK to enable its users to mint a NFT and post messages on Lens without having to pay for
 its transactions.
 
 ### Overview
@@ -12,7 +12,7 @@ its transactions.
 `DAPP` > `IPFS` > `Sponsor Server` > `Lens` > `Polygon Chain`
 
 - Only users that has a NFT minted are allow to post messages on Koru.
-- Once the user has minted it's NFT it's possible to post messages on Koru on a limited interval.
+- Once the user has minted the NFT, it's possible to post messages on Koru on a limited interval.
 
 1- Koru DAPP checks if user has a NFT minted and if it's time to post a message.
 
