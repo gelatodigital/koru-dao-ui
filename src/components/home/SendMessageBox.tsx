@@ -11,6 +11,7 @@ import uploadToIPFS from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from '../globals/CountTimer';
+// import * as IPFS from 'ipfs-core'
 
 export default function SendMessageBox() {
 
@@ -19,6 +20,13 @@ export default function SendMessageBox() {
     const { address } = useAccount();
     const { data: signer } = useSigner();
     const { signTypedDataAsync } = useSignTypedData();
+
+    // let ipfs;
+    // const makeIpfs = async () => {
+    //     ipfs = await IPFS.create();
+    // }
+    //
+    // makeIpfs();
 
     const { lensHandler, publications, setPublications, userPost, nftId }: any = useContext(AppContext);
 

@@ -9,7 +9,7 @@ import { AppProvider } from './contexts/AppContext';
 import { infuraProvider } from 'wagmi/providers/infura';
 import { publicProvider } from 'wagmi/providers/public';
 
-const infuraId = import.meta.env.VITE_INFURA_KEY;
+const infuraId = import.meta.env.VITE_INFURA_PROJECT_ID;
 
 const { chains, provider, webSocketProvider } = configureChains([chain.polygon, chain.polygonMumbai], [
         publicProvider(),
