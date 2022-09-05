@@ -1,5 +1,3 @@
-import * as IPFS from 'ipfs-core';
-
 import { create } from 'ipfs-http-client';
 
 const projectId = import.meta.env.VITE_INFURA_PROJECT_ID;
