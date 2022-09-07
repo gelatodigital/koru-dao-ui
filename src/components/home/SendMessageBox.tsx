@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
 import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
-import { BytesLike, ethers, Signer } from 'ethers';
+import { BytesLike, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { koruContract } from '../../blockchain/contracts/koruContract.factory';
 import { v4 as uuid } from 'uuid';
@@ -11,13 +11,10 @@ import uploadToIPFS from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from '../globals/CountTimer';
-import { Props } from 'react-inlinesvg';
-import { Provider } from '@ethersproject/providers';
 
 export default function SendMessageBox() {
 
     const { chain } = useNetwork();
-    const provider = useProvider();
     const { address } = useAccount();
     const { data: signer } = useSigner();
 
@@ -55,8 +52,7 @@ export default function SendMessageBox() {
     };
 
     const makeLensPost = async () => {
-        // Not sure if this is the correct target contract address
-        const targetAddress = "0x2334Bb5d5A1547970767315dE048e939C94D6E34";
+        const targetAddress = supportedChains[chain?.id as number].target;
         const { data } = await getRequestData();
 
         const relayRequest = {
