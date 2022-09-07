@@ -3,7 +3,7 @@ import { AppContext } from '../../contexts/AppContext';
 import { nftContract } from '../../blockchain/contracts/nftContract.factory';
 import { supportedChains } from '../../blockchain/constants';
 import { ethers, Signer } from 'ethers';
-import { GelatoRelaySDK } from '@gelatonetwork/gelato-relay-sdk';
+import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
 import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
 import MintNftModal from '../modals/MintNftModal';
 
