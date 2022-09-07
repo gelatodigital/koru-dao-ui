@@ -1,7 +1,7 @@
 export default function KoruModal(props: any) {
 
     return (
-        <div className="koru-modal">
+        <div className="koru-modal z-10">
 
             <div className="relative">
                 <div className="bg-white p-4 rounded-2xl">
