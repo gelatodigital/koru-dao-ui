@@ -37,12 +37,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         try {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             if (!contract.signer.getAddress) return;
-            const tokenId = await contract.balanceOf(address);
+            const tokenId = await contract.tokenOfOwnerByIndex(address, 0);
             setnftId(tokenId.toString() && tokenId.toString() !== '0');
         } catch (err) {
             setnftId(null);
             console.warn('No nft was found');
-            console.warn(err);
         }
     };
 
