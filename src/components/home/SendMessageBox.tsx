@@ -91,6 +91,7 @@ export default function SendMessageBox() {
 
     const post = async () => {
         try {
+            setIsGettingSignature(true);
             const { taskId } = await makeLensPost();
             if (!taskId) {
                 throw 'Failed to post message';
@@ -159,7 +160,7 @@ export default function SendMessageBox() {
                   color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
                 />
                 <button
-                  disabled={!nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                  disabled={userMessage.length <= 3 || !nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                   onClick={() => post()}
                   className={`koru-btn _primary w-44 flex items-center gap-4 justify-center ${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'opacity-20' : ''}`}
                 >
