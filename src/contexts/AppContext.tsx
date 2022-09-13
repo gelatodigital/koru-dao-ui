@@ -22,7 +22,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const [totalNftMinted, setTotalNftMinted] = useState<number>(0);
     const [totalNftSupply, setTotalNftSupply] = useState<number>(0);
-    const [nftId, setnftId] = useState<boolean | null>(true);
+    const [nftId, setNftId] = useState<boolean | null>(true);
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
     const [publications, setPublications] = useState<any[]>([]);
@@ -38,9 +38,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             if (!contract.signer.getAddress) return;
             const tokenId = await contract.tokenOfOwnerByIndex(address, 0);
-            setnftId(tokenId.toString() && tokenId.toString() !== '0');
+            setNftId(tokenId.toString());
         } catch (err) {
-            setnftId(null);
+            setNftId(null);
             console.warn('No nft was found');
         }
     };
