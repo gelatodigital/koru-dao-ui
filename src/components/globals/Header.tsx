@@ -9,9 +9,9 @@ export default function Header() {
     const { isConnected } = useAccount();
     const { nftId } = useContext(AppContext);
     return (
-        <header className="flex justify-between items-center">
+        <header className="flex flex-col md:flex-row justify-between items-center">
             <img src={IconLogo} alt="Koru DAO" className="w-40" />
-            <div className="items-center gap-4 hidden lg:flex">
+            <div className="mt-6 md:mt-0 items-center gap-2 md:gap-4 flex">
                 {isConnected &&
                   <>
                       {nftId && typeof nftId === 'string' &&

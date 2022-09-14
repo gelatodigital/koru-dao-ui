@@ -78,10 +78,14 @@
 }
 
 .koru-btn {
-    @apply font-medium cursor-pointer text-center hover:opacity-80 flex-shrink-0 px-6 py-3 text-white text-sm bg-koru-gray-light rounded-2xl transition-colors outline-0 disabled:cursor-not-allowed;
+    @apply font-medium cursor-pointer text-center hover:opacity-80 flex-shrink-0 px-6 py-3 text-white text-xs lg:text-sm bg-koru-gray-light rounded-2xl transition-colors outline-0 disabled:cursor-not-allowed;
 
     &._link {
         @apply bg-none text-koru-purple;
+    }
+
+    &._normal {
+        @apply text-sm;
     }
 
     &._small {
