@@ -13,28 +13,10 @@ const client = create({
     }
 });
 
-const uploadToIPFS = async (data: any) => {
+export const uploadToIPFS = async (data: any) => {
     return await client.add(JSON.stringify(data));
 };
 
-export default uploadToIPFS;
-
-// class IpfsHelper {
-//     ipfs: any;
-//
-//     constructor() {
-//         this.makeInstance();
-//     }
-//
-//     async makeInstance() {
-//         this.ipfs = await IPFS.create();
-//     }
-//
-//     add(data: any) {
-//         return this.ipfs.add(JSON.stringify(data));
-//     }
-// }
-//
-// const ipfsHelper = new IpfsHelper();
-//
-// export default ipfsHelper;
+export const pinToIPFS = async (cid: any) => {
+    return await client.pin.add(cid);
+};

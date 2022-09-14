@@ -7,7 +7,7 @@ import { BytesLike, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { koruContract } from '../../blockchain/contracts/koruContract.factory';
 import { v4 as uuid } from 'uuid';
-import uploadToIPFS from '../../utils/ipfs';
+import { uploadToIPFS, pinToIPFS } from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from '../globals/CountTimer';
@@ -48,6 +48,8 @@ export default function SendMessageBox() {
             appId: 'Koru DAO',
         };
         const { path } = await uploadToIPFS(ipfs);
+        const pin = await pinToIPFS(path);
+        console.log(pin);
         return path;
     };
 
@@ -70,9 +72,9 @@ export default function SendMessageBox() {
     };
 
     const getRequestData = async () => {
-        const ipfs = await uploadIpfs();
+        const cid = await uploadIpfs();
         const lensProfileId = supportedChains[chain?.id as number].lensProfileId;
-        const contentUri = "https://ipfs.infura.io/ipfs/" + ipfs;
+        const contentUri = "https://ipfs.infura.io/ipfs/" + cid;
         const contentModule = supportedChains[chain?.id as number].freeCollectModule;
         const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
         const referenceModule = "0x0000000000000000000000000000000000000000";
