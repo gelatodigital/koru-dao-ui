@@ -2,12 +2,12 @@ import UiIcon from '../globals/UiIcon';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
-import { useAccount, useNetwork, useProvider, useSigner } from 'wagmi';
+import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { BytesLike, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { koruContract } from '../../blockchain/contracts/koruContract.factory';
 import { v4 as uuid } from 'uuid';
-import { uploadToIPFS, pinToIPFS } from '../../utils/ipfs';
+import { pinToIPFS, uploadToIPFS } from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from '../globals/CountTimer';
@@ -122,20 +122,18 @@ export default function SendMessageBox() {
                         <p className="koru-gradient-text-1 inline-block font-medium">
                             @Koru DAO
                         </p>
-                        {!isPosted ?
-                            <textarea
-                                onChange={(e) => setUserMessage(e.target.value)}
-                                disabled={!nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
-                                rows={4}
-                                className="w-full p-4 mt-4 min-h-[100px]"
-                                placeholder="Hello, world!"
-                            /> :
-                            <div className="text-center mt-8 font-bold">Your post is being processed.</div>
-                        }
+                        <textarea
+                            onChange={(e) => setUserMessage(e.target.value)}
+                            disabled={!nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                            rows={4}
+                            className="w-full p-4 mt-4 min-h-[100px]"
+                            placeholder="Hello, world!"
+                            value={userMessage}
+                        />
                     </div>
                 </div>
             </div>
-            {address && !isPosted && <div className="flex justify-end mt-10 items-center gap-6">
+            {address && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
                     {userPost.canPost ?
