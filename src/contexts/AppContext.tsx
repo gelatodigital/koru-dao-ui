@@ -92,6 +92,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 },
             });
             setLensHandler(defaultProfile);
+            // TODO check if the handler is whitelisted
             setNoLensModal(chain?.id === 137 && !defaultProfile);
         } catch (err) {
             setNoLensModal(true);
