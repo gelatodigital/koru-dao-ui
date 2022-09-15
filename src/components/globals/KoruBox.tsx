@@ -1,7 +1,10 @@
 import UiIcon from './UiIcon';
 import { CountTimer } from './CountTimer';
+import { supportedChains } from '../../blockchain/constants';
+import { useNetwork } from 'wagmi';
 
 export function KoruBox(props: any) {
+    const { chain } = useNetwork();
 
     const statsMap: any = [
         {
@@ -22,40 +25,43 @@ export function KoruBox(props: any) {
     ];
 
     return (
-        <div className="koru-box !p-6">
-            <div className="flex gap-4">
-                <UiIcon icon="logo-pic" classes="w-12 h-12" />
-                <div className="w-full">
-                    <div className="flex justify-between">
+        <a href={`${supportedChains[chain?.id as number].lensProfileUrl}/posts/${props.publication.id}`}
+           target="_blank">
+            <div className="koru-box !p-6">
+                <div className="flex gap-4">
+                    <UiIcon icon="logo-pic" classes="w-12 h-12" />
+                    <div className="w-full">
+                        <div className="flex justify-between">
+                            <div>
+                                <h1 className="font-medium">
+                                    Koru DAO
+                                </h1>
+                                <p className="koru-gradient-text-1 inline-block font-medium">
+                                    @Koru DAO
+                                </p>
+                            </div>
+                            <div className="text-sm opacity-40">
+                                <CountTimer timestamp={props.timestamp} /> ago
+                            </div>
+                        </div>
                         <div>
-                            <h1 className="font-medium">
-                                Koru DAO
-                            </h1>
-                            <p className="koru-gradient-text-1 inline-block font-medium">
-                                @Koru DAO
-                            </p>
+                            {props.content}
                         </div>
-                        <div className="text-sm opacity-40">
-                            <CountTimer timestamp={props.timestamp} /> ago
+                        <div>
+                            <ul className="flex gap-8 mt-6">
+                                {statsMap.map((stat: any) => (
+                                    <li key={stat.key}
+                                        className="flex gap-2 text-sm"
+                                        style={{ color: stat.color }}
+                                    >
+                                        <UiIcon icon={stat.icon} classes="w-5 h-5" /> {props.publication.stats[stat.key]}
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
-                    </div>
-                    <div>
-                        {props.content}
-                    </div>
-                    <div>
-                        <ul className="flex gap-8 mt-6">
-                            {statsMap.map((stat: any) => (
-                                <li key={stat.key}
-                                    className="flex gap-2 text-sm"
-                                    style={{ color: stat.color }}
-                                >
-                                    <UiIcon icon={stat.icon} classes="w-5 h-5" /> {props.publication.stats[stat.key]}
-                                </li>
-                            ))}
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     );
 }

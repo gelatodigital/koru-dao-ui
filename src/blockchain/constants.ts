@@ -27,7 +27,7 @@ export const supportedChains: {
         target: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-polygon',
         lensUrl: 'https://api.lens.dev/',
-        lensProfileUrl: 'https://lenster.xyz/u/',
+        lensProfileUrl: 'https://lenster.xyz',
         openSeaUrl: 'https://opensea.io/',
     },
     80001: {
@@ -42,7 +42,7 @@ export const supportedChains: {
         target: '0x2334Bb5d5A1547970767315dE048e939C94D6E34',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-mumbai',
         lensUrl: 'https://api-mumbai.lens.dev/',
-        lensProfileUrl: 'https://testnet.lenster.xyz/u/',
+        lensProfileUrl: 'https://testnet.lenster.xyz',
         openSeaUrl: 'https://testnets.opensea.io/',
     },
 };
