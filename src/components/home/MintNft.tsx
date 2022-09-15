@@ -57,7 +57,7 @@ export default function MintNft() {
                     </figure>
                     <div className="text-center lg:text-left">
                         <p className="font-bold text-lg koru-gradient-text-3">
-                            {chain?.id === 137 && <span>{totalNftMinted}/ {totalNftSupply} </span>}
+                            {chain?.id === 137 && <span>{totalNftSupply - totalNftMinted} </span>}
                             Koru DAO NFTs available
                         </p>
                         {chain?.id === 137 && !lensHandler && <p className="text-red-600 text-sm block">
