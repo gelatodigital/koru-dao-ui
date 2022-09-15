@@ -10,10 +10,11 @@ import NoHandlerModal from './components/modals/NoHandlerModal';
 import MintNft from './components/home/MintNft';
 import BuyNft from './components/home/BuyNft';
 import { useRegisterSW } from 'virtual:pwa-register/react';
+import MintNftModal from './components/modals/MintNftModal';
 
 export default function App() {
     const { isConnected } = useAccount();
-    const { connectModal, lensHandler, noLensModal, nftId, totalNftMinted, totalNftSupply } = useContext(AppContext);
+    const { connectModal, lensHandler, noLensModal, mintModal, isMinting, nftId, totalNftMinted, totalNftSupply } = useContext(AppContext);
 
     const intervalMS = 45 * 1000;
     useRegisterSW({
@@ -53,6 +54,8 @@ export default function App() {
             {connectModal && <ConnectModal />}
 
             {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
+
+            {mintModal && <MintNftModal />}
 
         </div>
     );

@@ -20,6 +20,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [connectModal, setConnectModal] = useState<boolean>(false);
     const [mintModal, setMintModal] = useState<boolean>(false);
 
+    const [isMinting, setIsMinting] = useState<any>(false);
     const [totalNftMinted, setTotalNftMinted] = useState<number>(0);
     const [totalNftSupply, setTotalNftSupply] = useState<number>(0);
     const [nftId, setNftId] = useState<boolean | null>(true);
@@ -149,6 +150,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     return (
         <AppContext.Provider
             value={{
+                setIsMinting,
+                isMinting,
                 connectModal,
                 setConnectModal,
                 nftId,

@@ -28,7 +28,7 @@ export const supportedChains: {
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-polygon',
         lensUrl: 'https://api.lens.dev/',
         lensProfileUrl: 'https://lenster.xyz',
-        openSeaUrl: 'https://opensea.io/',
+        openSeaUrl: 'https://opensea.io/collection/korudao',
     },
     80001: {
         lensHandle: 'korudao.test',
@@ -43,6 +43,6 @@ export const supportedChains: {
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-mumbai',
         lensUrl: 'https://api-mumbai.lens.dev/',
         lensProfileUrl: 'https://testnet.lenster.xyz',
-        openSeaUrl: 'https://testnets.opensea.io/',
+        openSeaUrl: 'https://testnets.opensea.io/collection/unidentified-contract-76fl4hv6mu',
     },
 };

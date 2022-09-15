@@ -5,16 +5,17 @@ import UiIcon from '../globals/UiIcon';
 
 export default function MintNftModal(props: any) {
 
-    const { setMintModal, nftId } = useContext(AppContext);
+    const { setMintModal, nftId, isMinting, setIsMinting } = useContext(AppContext);
     const [isMinted, setIsMinted] = useState<any>(false);
 
     useEffect(() => {
         const interval = setInterval(() => {
             console.log('Minting');
             if (nftId) {
-                setIsMinted(false);
+                setIsMinted(true);
+                setIsMinting(false);
             }
-        }, 10000);
+        }, 5000);
 
         return () => clearInterval(interval);
     }, [props]);
@@ -24,19 +25,18 @@ export default function MintNftModal(props: any) {
             close={setMintModal}
             modal={
                 <div className="lg:min-w-[680px] p-10 flex flex-col items-center gap-10">
-                    {!isMinted && props.propIsMinting &&
+                    {!isMinted && isMinting &&
                       <>
                           <div className="h-32 w-32 mx-auto">
                               <UiIcon icon="loading-2" classes="w-32 h-32 absolute animate animate-spin" />
                           </div>
                           <p className="font-bold text-2xl">
-
-                              NFT minting...
+                              NFT minting..., please hang on a little bit.
                           </p>
                       </>
                     }
 
-                    {!isMinted && !props.propIsMinting &&
+                    {!isMinted && !isMinting &&
                       <>
                           <div className="h-28 w-28 mx-auto">
                               <UiIcon icon="logo-pic" classes="w-32 h-32" />
@@ -49,9 +49,11 @@ export default function MintNftModal(props: any) {
 
                     {isMinted &&
                       <>
-                          <div className="h-28 w-28 mx-auto">
-                              <UiIcon icon="logo-pic" classes="w-32 h-32" />
-                          </div>
+                          <img
+                            src={`https://ops.infura-ipfs.io/ipfs/QmVUFZH3CcL6cec3Q9p48EWcRWReY8ktMKSZfcPdyBo71H/${nftId}.png`}
+                            className="w-64 rounded-full"
+                            alt="Nft"
+                          />
                           <p className="font-bold text-3xl">
                               Congratulations!
                           </p>

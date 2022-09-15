@@ -9,14 +9,12 @@ import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
 
 export default function MintNft() {
 
-    const { lensHandler, setMintModal, mintModal, totalNftMinted, totalNftSupply } = useContext(AppContext);
+    const { lensHandler, setMintModal, isMinting, setIsMinting, totalNftMinted, totalNftSupply } = useContext(AppContext);
     const { address } = useAccount();
     const { chain } = useNetwork();
     const { signTypedDataAsync } = useSignTypedData();
     const { data: signer } = useSigner();
     const provider = useProvider();
-
-    const [isMinting, setIsMinting] = useState<any>(false);
 
     const mint = async () => {
         if (chain?.id === 137 && !lensHandler) return;
@@ -74,8 +72,6 @@ export default function MintNft() {
                     Mint NFT now
                 </button>
             </div>
-
-            {mintModal && <MintNftModal propIsMinting={isMinting} />}
         </div>
     );
 };
