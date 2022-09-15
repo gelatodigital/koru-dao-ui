@@ -124,7 +124,7 @@ export default function SendMessageBox() {
                         </p>
                         <textarea
                             onChange={(e) => setUserMessage(e.target.value)}
-                            disabled={!nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                            disabled={isPosted || !nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                             rows={4}
                             className="w-full p-4 mt-4 min-h-[100px]"
                             placeholder="Hello, world!"
@@ -136,20 +136,32 @@ export default function SendMessageBox() {
             {address && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
-                    {userPost.canPost ?
-                        <div>
-                            {userPost.lastPost === 0 ?
-                                nftId ? <p>Go ahead and publish your first post!</p>
-                                    : <p>You need to mint a NFT to publish your first post!</p>
-                                :
-                                <p>Your last post was <CountTimer timestamp={userPost.lastPost} /> ago.</p>
-                            }
-                        </div>
+
+                    {isPosted ?
+                        <>
+                            <div>
+                                You can post again in <CountTimer direction={'down'}
+                                                                  timestamp={Date.now() + userPost.postInterval} />.
+                            </div>
+                        </>
                         :
-                        <div>
-                            You can post again in <CountTimer direction={'down'}
-                                                              timestamp={userPost.lastPost + userPost.postInterval} />.
-                        </div>
+                        <>
+                            {userPost.canPost ?
+                                <div>
+                                    {userPost.lastPost === 0 ?
+                                        nftId ? <p>Go ahead and publish your first post!</p>
+                                            : <p>You need to mint a NFT to publish your first post!</p>
+                                        :
+                                        <p>Your last post was <CountTimer timestamp={userPost.lastPost} /> ago.</p>
+                                    }
+                                </div>
+                                :
+                                <div>
+                                    You can post again in <CountTimer direction={'down'}
+                                                                      timestamp={userPost.lastPost + userPost.postInterval} />.
+                                </div>
+                            }
+                        </>
                     }
                 </div>
 
