@@ -24,8 +24,10 @@ export function KoruBox(props: any) {
         },
     ];
 
+    const chainId: number = chain?.id && [137, 80001].includes(Number(chain?.id)) ? chain.id : 137;
+
     return (
-        <a href={`${supportedChains[chain?.id as number].lensProfileUrl}/posts/${props.publication.id}`}
+        <a href={`${supportedChains[chainId]?.lensProfileUrl}/posts/${props.publication.id}`}
            target="_blank">
             <div className="koru-box !p-6">
                 <div className="flex gap-4">

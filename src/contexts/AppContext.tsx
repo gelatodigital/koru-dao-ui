@@ -103,11 +103,12 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     const getAllPosts = async () => {
         try {
+            const chainId: number = chain?.id && [137, 80001].includes(Number(chain?.id)) ? chain.id : 137;
             const query = {
-                "profileId": supportedChains[chain?.id as number ?? 137]?.lensProfileId,
+                "profileId": supportedChains[chainId]?.lensProfileId,
                 "publicationTypes": ["POST", "COMMENT", "MIRROR"],
             };
-            const { publications } = await request(supportedChains[chain?.id as number ?? 137].lensUrl, GET_PUBLICATIONS, {
+            const { publications } = await request(supportedChains[chainId].lensUrl, GET_PUBLICATIONS, {
                 request: query,
             });
 
