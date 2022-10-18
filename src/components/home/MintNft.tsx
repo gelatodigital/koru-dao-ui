@@ -1,20 +1,24 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { nftContract } from '../../blockchain/contracts/nftContract.factory';
 import { supportedChains } from '../../blockchain/constants';
 import { BytesLike, Signer } from 'ethers';
-import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
-import MintNftModal from '../modals/MintNftModal';
+import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
 
 export default function MintNft() {
 
-    const { lensHandler, setMintModal, isMinting, setIsMinting, totalNftMinted, totalNftSupply } = useContext(AppContext);
+    const {
+        lensHandler,
+        setMintModal,
+        isMinting,
+        setIsMinting,
+        totalNftMinted,
+        totalNftSupply,
+    } = useContext(AppContext);
     const { address } = useAccount();
     const { chain } = useNetwork();
-    const { signTypedDataAsync } = useSignTypedData();
     const { data: signer } = useSigner();
-    const provider = useProvider();
 
     const mint = async () => {
         if (chain?.id === 137 && !lensHandler) return;
