@@ -124,7 +124,7 @@ export default function SendMessageBox() {
                         </p>
                         <textarea
                             onChange={(e) => setUserMessage(e.target.value)}
-                            disabled={isPosted || !nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                            disabled={isPosted || !nftId || !userPost?.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                             rows={4}
                             className="w-full p-4 mt-4 min-h-[100px]"
                             placeholder="Hello, world!"
@@ -146,19 +146,19 @@ export default function SendMessageBox() {
                         </>
                         :
                         <>
-                            {userPost.canPost ?
+                            {userPost?.canPost ?
                                 <div>
-                                    {userPost.lastPost === 0 ?
+                                    {userPost?.lastPost === 0 ?
                                         nftId ? <p>Go ahead and publish your first post!</p>
                                             : <p>You need to mint a NFT to publish your first post!</p>
                                         :
-                                        <p>Your last post was <CountTimer timestamp={userPost.lastPost} /> ago.</p>
+                                        <p>Your last post was <CountTimer timestamp={userPost?.lastPost} /> ago.</p>
                                     }
                                 </div>
                                 :
                                 <div>
                                     You can post again in <CountTimer direction={'down'}
-                                                                      timestamp={userPost.lastPost + userPost.postInterval} />.
+                                                                      timestamp={userPost?.lastPost + userPost?.postInterval} />.
                                 </div>
                             }
                         </>

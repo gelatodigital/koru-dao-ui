@@ -28,16 +28,27 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
     const [publications, setPublications] = useState<any[]>([]);
 
+    const [notEligibleModal, setNotEligibleModal] = useState<boolean>(true);
+    const [isEligible, setIsEligible] = useState<boolean>(false);
+
+    const [isMintingOpen, setIsMintingOpen] = useState<boolean | null>(null);
+
     const [canUserPost, setCanUserPost] = useState<boolean>(false);
     const [userPost, setUserPost] = useState<{ [key: string]: any }>({
         lastPost: null,
         postInterval: null,
     });
 
+
     const getNft = async () => {
         try {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             if (!contract.signer.getAddress) return;
+
+            // Wait till BE fix the issue
+            const isEligible = await contract.isEligible(address);
+            setIsEligible(isEligible[0]);
+
             const tokenId = await contract.tokenOfOwnerByIndex(address, 0);
             setNftId(tokenId.toString());
         } catch (err) {
@@ -46,6 +57,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    // Get the connected user last post
     const getLastPost = async () => {
         try {
             const contract = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
@@ -118,6 +130,24 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    // Check if Minting period is open
+    const openDate = new Date(import.meta.env.VITE_MINT_DATE);
+
+    function getIsMintingOpen() {
+        const timeNow = new Date();
+        setIsMintingOpen(timeNow > openDate);
+    }
+
+    useEffect(() => {
+        getIsMintingOpen();
+
+        const interval = setInterval(() => {
+            getIsMintingOpen();
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [address, isConnected, chain, signer]);
+
 
     useEffect(() => {
         getAllPosts();
@@ -134,15 +164,22 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             return;
         }
 
-        getNft();
         nftAmountLeft();
         getWalletLensHandle();
-        getLastPost();
 
-        const interval = setInterval(() => {
+        if (!noLensModal) {
             getNft();
             getLastPost();
+        }
+
+        const interval = setInterval(() => {
             nftAmountLeft();
+
+            if (!noLensModal) {
+                getNft();
+                getLastPost();
+            }
+
         }, 10000);
 
         return () => clearInterval(interval);
@@ -167,6 +204,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 totalNftMinted,
                 totalNftSupply,
                 userPost,
+                setNotEligibleModal,
+                notEligibleModal,
+                isEligible,
+                isMintingOpen,
             }}
         >
             {children}

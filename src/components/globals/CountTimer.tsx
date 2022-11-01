@@ -1,12 +1,16 @@
 import React from 'react';
 import { useCountdown } from '../../hooks/useCountdown';
 
-const CountTimer = ({ timestamp, direction = 'up' }: { timestamp: number, direction?: 'up' | 'down' }) => {
+const CountTimer = ({
+                        timestamp,
+                        direction = 'up',
+                        classNames,
+                    }: { timestamp: number, direction?: 'up' | 'down', classNames: string }) => {
     const [days, hours, minutes, seconds] = useCountdown(timestamp, direction);
 
     if (days + hours + minutes + seconds > 0) {
         return (
-            <span className="inline-block">
+            <span className={`inline-block ${classNames}`}>
                 {direction === 'up' ?
                     <span>
                         {days > 0 ? `${days} ${days > 1 ? 'days' : 'day'} ` : null}
@@ -27,13 +31,13 @@ const CountTimer = ({ timestamp, direction = 'up' }: { timestamp: number, direct
 
                         {minutes > 0 ? `${minutes}m ` : null}
 
-                        { <span>{seconds < 10 ? `0${seconds}s` : `${seconds}s`}</span>}
+                        {<span>{seconds < 10 ? `0${seconds}s` : `${seconds}s`}</span>}
                     </span>
                 }
             </span>
         );
     } else {
-        return <span>0s</span>;
+        return <span className={`inline-block ${classNames}`}>0s</span>;
     }
 };
 

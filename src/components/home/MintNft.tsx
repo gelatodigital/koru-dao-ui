@@ -15,6 +15,7 @@ export default function MintNft() {
         setIsMinting,
         totalNftMinted,
         totalNftSupply,
+        isEligible,
     } = useContext(AppContext);
     const { address } = useAccount();
     const { chain } = useNetwork();
@@ -62,14 +63,21 @@ export default function MintNft() {
                             {chain?.id === 137 && <span>{totalNftSupply - totalNftMinted} </span>}
                             Koru DAO NFTs available
                         </p>
-                        {chain?.id === 137 && !lensHandler && <p className="text-red-600 text-sm block">
-                            You must have a Lens handle to mint.
-                        </p>}
+                        {chain?.id === 137 && !lensHandler &&
+                          <p className="text-red-600 text-sm block">
+                              You must have a Lens handle to mint.
+                          </p>
+                        }
+                        {chain?.id === 137 && !isEligible &&
+                          <p className="text-red-600 text-sm block">
+                              You are not eligible to mint :(
+                          </p>
+                        }
                     </div>
                 </div>
                 <button
-                    disabled={chain?.id === 137 && !lensHandler}
-                    style={chain?.id === 137 && !lensHandler ? { opacity: 0.5 } : {}}
+                    disabled={chain?.id === 137 && !lensHandler || !isEligible}
+                    style={chain?.id === 137 && !lensHandler || !isEligible ? { opacity: 0.5 } : {}}
                     onClick={() => mint()}
                     className="koru-btn _pink inline-block"
                 >

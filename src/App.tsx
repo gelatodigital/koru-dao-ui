@@ -7,21 +7,36 @@ import SendMessageBox from './components/home/SendMessageBox';
 import ConnectModal from './components/modals/ConnectModal';
 import PostsBox from './components/home/PostsBox';
 import NoHandlerModal from './components/modals/NoHandlerModal';
+import NoEligibleModal from './components/modals/NoEligibleModal';
+import UiCountdownMint from './components/globals/UiCountdownMint';
 import MintNft from './components/home/MintNft';
 import BuyNft from './components/home/BuyNft';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import MintNftModal from './components/modals/MintNftModal';
+import { isFalseAndNotNull } from './utils/utils';
 
 export default function App() {
     const { isConnected } = useAccount();
-    const { connectModal, lensHandler, noLensModal, mintModal, isMinting, nftId, totalNftMinted, totalNftSupply } = useContext(AppContext);
+    const {
+        connectModal,
+        lensHandler,
+        noLensModal,
+        mintModal,
+        isMinting,
+        nftId,
+        totalNftMinted,
+        totalNftSupply,
+        notEligibleModal,
+        isEligible,
+        isMintingOpen,
+    } = useContext(AppContext);
 
     const intervalMS = 45 * 1000;
     useRegisterSW({
         onRegistered(r: any) {
             r &&
             setInterval(async () => {
-                console.log('update')
+                console.log('update');
                 await r.update();
             }, intervalMS);
         },
@@ -32,7 +47,9 @@ export default function App() {
             <Header />
             <main className="mt-6 lg:mt-20 md:w-[640px] mx-auto">
 
-                {isConnected && !nftId &&
+                {!isMintingOpen && <UiCountdownMint />}
+
+                {isMintingOpen && isConnected && !nftId &&
                   <>
                       {
                           totalNftMinted === totalNftSupply ?
@@ -52,6 +69,8 @@ export default function App() {
             </div>
 
             {connectModal && <ConnectModal />}
+
+            {isConnected && lensHandler && !isEligible && notEligibleModal && <NoEligibleModal />}
 
             {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
 
