@@ -25,13 +25,13 @@ const CountTimer = ({
                     </span>
                     :
                     <span>
-                        {days > 0 ? `${days} ${days > 1 ? 'days' : 'day'} ` : null}
+                        {days > 0 ? `${days}d ` : null}
 
-                        {hours > 0 ? `${hours} hours ` : null}
+                        {hours > 0 ? `${hours}h ` : null}
 
                         {minutes > 0 ? `${minutes}m ` : null}
 
-                        {<span>{seconds < 10 ? `0${seconds}s` : `${seconds}s`}</span>}
+                        {<span>{`${seconds}s`}</span>}
                     </span>
                 }
             </span>
