@@ -5,7 +5,7 @@ const CountTimer = ({
                         timestamp,
                         direction = 'up',
                         classNames,
-                    }: { timestamp: number, direction?: 'up' | 'down', classNames: string }) => {
+                    }: { timestamp: number, direction?: 'up' | 'down', classNames?: string }) => {
     const [days, hours, minutes, seconds] = useCountdown(timestamp, direction);
 
     if (days + hours + minutes + seconds > 0) {
