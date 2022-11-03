@@ -33,7 +33,7 @@ export default function SendMessageBox() {
                 <div className="flex justify-center mt-4">
                     <a
                         className="block bg-koru-pink text-white px-6 py-3 rounded-2xl font-medium"
-                        href="https://calendar.google.com/calendar/render?action=TEMPLATE&dates=20221111T210000Z%2F20221111T224500Z&details=&location=World&text=KoruDao%20Minting%20Day%21"
+                        href="/koru-launch.ics"
                         target="_blank"
                     >
                         Add it to my calendar
