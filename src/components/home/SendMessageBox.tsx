@@ -150,7 +150,7 @@ export default function SendMessageBox() {
                                 <div>
                                     {userPost?.lastPost === 0 ?
                                         nftId ? <p>Go ahead and publish your first post!</p>
-                                            : <p>You need to mint a NFT to publish your first post!</p>
+                                            : <p>You need to own Koru DAO a NFT to publish your first post!</p>
                                         :
                                         <p>Your last post was <CountTimer timestamp={userPost?.lastPost} /> ago.</p>
                                     }
