@@ -40,14 +40,24 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     });
 
 
-    const getNft = async () => {
+    const getIsEligible = async () => {
         try {
             const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             if (!contract.signer.getAddress) return;
 
-            // Wait till BE fix the issue
             const isEligible = await contract.isEligible(address);
             setIsEligible(isEligible[0]);
+
+        } catch (err) {
+            setNftId(null);
+            console.warn('Wallet not eligible');
+        }
+    };
+
+    const getNft = async () => {
+        try {
+            const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            if (!contract.signer.getAddress) return;
 
             const tokenId = await contract.tokenOfOwnerByIndex(address, 0);
             setNftId(tokenId.toString());
@@ -169,6 +179,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
         if (!noLensModal) {
             getNft();
+            getIsEligible();
             getLastPost();
         }
 
@@ -177,6 +188,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
             if (!noLensModal) {
                 getNft();
+                getIsEligible();
                 getLastPost();
             }
 
