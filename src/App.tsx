@@ -13,7 +13,6 @@ import MintNft from './components/home/MintNft';
 import BuyNft from './components/home/BuyNft';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import MintNftModal from './components/modals/MintNftModal';
-import { isFalseAndNotNull } from './utils/utils';
 
 export default function App() {
     const { isConnected } = useAccount();
@@ -22,7 +21,6 @@ export default function App() {
         lensHandler,
         noLensModal,
         mintModal,
-        isMinting,
         nftId,
         totalNftMinted,
         totalNftSupply,
@@ -70,7 +68,9 @@ export default function App() {
 
             {connectModal && <ConnectModal />}
 
-            {isConnected && lensHandler && !isEligible && notEligibleModal && <NoEligibleModal />}
+            { `${nftId}`}
+
+            {isConnected && lensHandler && !nftId && !isEligible && notEligibleModal && <NoEligibleModal />}
 
             {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
 

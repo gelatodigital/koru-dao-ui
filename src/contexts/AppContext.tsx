@@ -49,7 +49,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             setIsEligible(isEligible[0]);
 
         } catch (err) {
-            setNftId(null);
+            setIsEligible(false);
             console.warn('Wallet not eligible');
         }
     };
