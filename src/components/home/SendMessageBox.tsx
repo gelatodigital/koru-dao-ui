@@ -74,7 +74,7 @@ export default function SendMessageBox() {
     const getRequestData = async () => {
         const cid = await uploadIpfs();
         const lensProfileId = supportedChains[chain?.id as number].lensProfileId;
-        const contentUri = "https://ipfs.infura.io/ipfs/" + cid;
+        const contentUri = "https://koru.infura-ipfs.io/ipfs/" + cid;
         const contentModule = supportedChains[chain?.id as number].freeCollectModule;
         const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
         const referenceModule = "0x0000000000000000000000000000000000000000";
