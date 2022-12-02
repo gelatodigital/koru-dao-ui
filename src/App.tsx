@@ -68,8 +68,6 @@ export default function App() {
 
             {connectModal && <ConnectModal />}
 
-            { `${nftId}`}
-
             {isConnected && lensHandler && !nftId && !isEligible && notEligibleModal && <NoEligibleModal />}
 
             {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
