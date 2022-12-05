@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { nftContract } from '../../blockchain/contracts/nftContract.factory';
+import { relayTransit } from '../../blockchain/contracts/relayTransit.factory';
 import { supportedChains } from '../../blockchain/constants';
-import { BytesLike, Signer } from 'ethers';
-import { useAccount, useNetwork, useSigner } from 'wagmi';
-import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
+import { ethers, Signer } from 'ethers';
+import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { relayV0Send } from '../../utils/relayV0';
 
 export default function MintNft() {
 
@@ -17,35 +17,82 @@ export default function MintNft() {
         totalNftSupply,
         isEligible,
     } = useContext(AppContext);
+
     const { address } = useAccount();
     const { chain } = useNetwork();
     const { data: signer } = useSigner();
+    const provider = useProvider();
+    const { signTypedDataAsync } = useSignTypedData();
 
     const mint = async () => {
         if (chain?.id === 137 && !lensHandler) return;
         try {
             setMintModal(true);
-            const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const contract = relayTransit.connect(supportedChains[chain?.id as number].relayTransit, signer as Signer);
 
-            const { data } = await contract.populateTransaction.mint([]);
-
-            const relayRequest = {
+            const domain: any = {
+                name: "KoruDaoRelayTransit",
+                version: "1",
                 chainId: chain?.id,
-                target: supportedChains[chain?.id as number].nft,
-                data: data as BytesLike,
-                user: address,
+                verifyingContract: supportedChains[chain?.id as number].relayTransit,
             };
 
-            const { taskId } = await GelatoRelaySDK.relayWithSponsoredUserAuthCall(
-                relayRequest as any,
-                signer?.provider as any,
-                'KORU_DAO_KEY',
+            const mintType = [
+                {
+                    name: "user",
+                    type: "address",
+                },
+                { name: "nonce", type: "uint256" },
+                {
+                    name: "deadline",
+                    type: "uint256",
+                },
+            ];
+
+            const types = { Mint: mintType };
+            const deadline = (await provider.getBlock("latest")).timestamp + 300;
+            const nonce = await contract.nonces(address);
+
+            const message = {
+                user: address,
+                nonce,
+                deadline,
+            };
+
+
+            const signature = await signTypedDataAsync({
+                domain,
+                types,
+                value: message,
+            });
+
+            const r = "0x" + signature.substring(2, 66);
+            const s = "0x" + signature.substring(66, 130);
+            const vStr = signature.substring(130, 132);
+            const v = parseInt(vStr, 16);
+
+            const sig = { v, r, s, deadline };
+
+            const fee = ethers.utils.parseEther('0.05'); // TODO: add estimations?
+            const data = contract.interface.encodeFunctionData("mint", [
+                address,
+                fee,
+                sig,
+            ]);
+
+            const response = await relayV0Send(
+                Number(chain?.id),
+                supportedChains[chain?.id as number].relayTransit,
+                data,
+                fee.toString(),
+                10_000_000,
             );
 
-            if (taskId) {
+            if (response) {
                 setIsMinting(true);
             }
         } catch (e) {
+            debugger;
             setMintModal(false);
             setIsMinting(false);
         }

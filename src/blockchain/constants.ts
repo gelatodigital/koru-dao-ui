@@ -13,6 +13,7 @@ export const supportedChains: {
         subgraphUrl: string;
         lensUrl: string;
         openSeaUrl: string;
+        relayTransit: string;
     };
 } = {
     137: {
@@ -23,6 +24,7 @@ export const supportedChains: {
         koru: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
         freeCollectModule: '0x23b9467334bEb345aAa6fd1545538F3d54436e96',
         lensHub: '0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d',
+        relayTransit: '0x',
         maxFee: '0.1',
         target: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-polygon',
@@ -38,6 +40,7 @@ export const supportedChains: {
         koru: '0x2334Bb5d5A1547970767315dE048e939C94D6E34',
         freeCollectModule: '0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c',
         lensHub: '0x60Ae865ee4C725cd04353b5AAb364553f56ceF82',
+        relayTransit: '0xC401cA07564D54bA47b542eD9838A2a36648C954',
         maxFee: '1',
         target: '0x2334Bb5d5A1547970767315dE048e939C94D6E34',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-mumbai',
