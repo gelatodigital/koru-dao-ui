@@ -1,22 +1,24 @@
 import UiIcon from '../globals/UiIcon';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { GelatoRelaySDK } from '@gelatonetwork/relay-sdk';
-import { useAccount, useNetwork, useSigner } from 'wagmi';
-import { BytesLike, Signer } from 'ethers';
+import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { ethers, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
-import { koruContract } from '../../blockchain/contracts/koruContract.factory';
 import { v4 as uuid } from 'uuid';
 import { pinToIPFS, uploadToIPFS } from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from '../globals/CountTimer';
+import { relayTransit } from '../../blockchain/contracts/relayTransit.factory';
+import { relayV0Send } from '../../utils/relayV0';
 
 export default function SendMessageBox() {
 
     const { chain } = useNetwork();
     const { address } = useAccount();
     const { data: signer } = useSigner();
+    const provider = useProvider();
+    const { signTypedDataAsync } = useSignTypedData();
 
     const { lensHandler, publications, setPublications, userPost, nftId }: any = useContext(AppContext);
 
@@ -54,55 +56,120 @@ export default function SendMessageBox() {
     };
 
     const makeLensPost = async () => {
-        const targetAddress = supportedChains[chain?.id as number].target;
-        const { data } = await getRequestData();
+        const contract = relayTransit.connect(supportedChains[chain?.id as number].relayTransit, signer as Signer);
 
-        const relayRequest = {
+        const domain: any = {
+            name: "KoruDaoRelayTransit",
+            version: "1",
             chainId: chain?.id,
-            target: targetAddress,
-            data: data as BytesLike,
-            user: address,
+            verifyingContract: supportedChains[chain?.id as number].relayTransit,
         };
 
-        return await GelatoRelaySDK.relayWithSponsoredUserAuthCall(
-            relayRequest as any,
-            signer?.provider as any,
-            'KORU_DAO_KEY',
-        );
-    };
+        const postType = [
+            {
+                name: "user",
+                type: "address",
+            },
+            {
+                name: "nonce",
+                type: "uint256",
+            },
+            {
+                name: "deadline",
+                type: "uint256",
+            },
+            {
+                name: "profileId",
+                type: "uint256",
+            },
+            {
+                name: "contentURI",
+                type: "string",
+            },
+            {
+                name: "collectModule",
+                type: "address",
+            },
+            {
+                name: "collectModuleInitData",
+                type: "bytes",
+            },
+            {
+                name: "referenceModule",
+                type: "address",
+            },
+            {
+                name: "referenceModuleInitData",
+                type: "bytes",
+            },
+        ];
 
-    const getRequestData = async () => {
+        const types = { Post: postType };
+        const deadline = (await provider.getBlock("latest")).timestamp + 300;
+        const nonce = await contract.nonces(address);
+
         const cid = await uploadIpfs();
-        const lensProfileId = supportedChains[chain?.id as number].lensProfileId;
-        const contentUri = "https://koru.infura-ipfs.io/ipfs/" + cid;
-        const contentModule = supportedChains[chain?.id as number].freeCollectModule;
-        const collectModuleInitData = "0x0000000000000000000000000000000000000000000000000000000000000000";
-        const referenceModule = "0x0000000000000000000000000000000000000000";
-        const referenceModuleInitData = "0x";
-        const contract = koruContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+        const contentURI = "https://koru.infura-ipfs.io/ipfs/" + cid;
 
-        return contract.populateTransaction.post([
-            lensProfileId,
-            contentUri,
-            contentModule,
-            collectModuleInitData,
-            referenceModule,
-            referenceModuleInitData],
-        );
+        const postVars = {
+            profileId: supportedChains[chain?.id as number].lensProfileId,
+            contentURI,
+            collectModule: supportedChains[chain?.id as number].freeCollectModule,
+            collectModuleInitData:
+                "0x0000000000000000000000000000000000000000000000000000000000000000",
+            referenceModule: ethers.constants.AddressZero,
+            referenceModuleInitData: "0x",
+        };
+
+        const message = {
+            user: address,
+            nonce,
+            deadline,
+            ...postVars,
+        };
+
+        const signature = await signTypedDataAsync({
+            domain,
+            types,
+            value: message,
+        });
+
+        const r = "0x" + signature.substring(2, 66);
+        const s = "0x" + signature.substring(66, 130);
+        const vStr = signature.substring(130, 132);
+        const v = parseInt(vStr, 16);
+        const sig = { v, r, s, deadline };
+        const fee = ethers.utils.parseEther('0.05');
+
+        return contract.interface.encodeFunctionData("mint", [
+            address,
+            fee,
+            sig,
+        ]);
     };
 
     const post = async () => {
         try {
             setIsGettingSignature(true);
-            const { taskId } = await makeLensPost();
-            if (!taskId) {
+
+            const data = await makeLensPost();
+
+            const fee = ethers.utils.parseEther('0.05');
+            const response = await relayV0Send(
+                Number(chain?.id),
+                supportedChains[chain?.id as number].relayTransit,
+                data,
+                fee.toString(),
+                10_000_000,
+            );
+
+            if (!response?.taskId) {
                 throw 'Failed to post message';
             } else {
                 setUserMessage('');
                 setIsGettingSignature(false);
                 setIsPosted(true);
             }
-
         } catch (e) {
             console.warn('Failed to post message', e);
             setIsGettingSignature(false);

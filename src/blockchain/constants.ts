@@ -24,7 +24,7 @@ export const supportedChains: {
         koru: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
         freeCollectModule: '0x23b9467334bEb345aAa6fd1545538F3d54436e96',
         lensHub: '0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d',
-        relayTransit: '0x',
+        relayTransit: '0xcEDdF46A0B2AFBFEeD1E27ebD99CB804E03706B3',
         maxFee: '0.1',
         target: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-polygon',
