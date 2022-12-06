@@ -34,7 +34,6 @@ export default function App() {
         onRegistered(r: any) {
             r &&
             setInterval(async () => {
-                console.log('update');
                 await r.update();
             }, intervalMS);
         },
