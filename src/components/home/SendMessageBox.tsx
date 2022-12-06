@@ -141,9 +141,10 @@ export default function SendMessageBox() {
         const sig = { v, r, s, deadline };
         const fee = ethers.utils.parseEther('0.05');
 
-        return contract.interface.encodeFunctionData("mint", [
+        return contract.interface.encodeFunctionData("post", [
             address,
             fee,
+            postVars,
             sig,
         ]);
     };

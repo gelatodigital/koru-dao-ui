@@ -18,6 +18,7 @@ export const relayV0Send = async (
     };
     try {
         const response = await axios.post(`${RELAY_URL}/relays/${chainId}`, params);
+        console.log(response.data)
         return response.data;
     } catch (err: unknown) {
         console.error(`relayV0Send error: ${(err as Error).message}`);
