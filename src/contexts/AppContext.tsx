@@ -71,7 +71,11 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const getLastPost = async () => {
         try {
             const contract = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
-            const lastPost = await contract.lastPost(address);
+            const nft = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+
+            const tokenId = await nft.tokenOfOwnerByIndex(address, 0);
+            const lastPost = await contract.lastPost(tokenId);
+
             const postInterval = await contract.postInterval();
             if (lastPost && postInterval) {
                 const _last = Number(lastPost.toString()) * 1000;
