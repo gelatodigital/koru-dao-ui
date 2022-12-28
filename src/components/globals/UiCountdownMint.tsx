@@ -1,17 +1,6 @@
-import { useNetwork } from 'wagmi';
-// @ts-ignore
-import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from './CountTimer';
-import { useContext } from 'react';
-import { AppContext } from '../../contexts/AppContext';
 
 export default function SendMessageBox() {
-
-    const { chain } = useNetwork();
-    const {
-        totalNftMinted,
-        totalNftSupply,
-    } = useContext(AppContext);
 
     const openDate = new Date(import.meta.env.VITE_MINT_DATE);
 
