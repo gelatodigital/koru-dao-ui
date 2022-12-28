@@ -19,9 +19,9 @@ export default function SendMessageBox() {
         <div>
             <div className="koru-box koru-bg-primary mt-6 lg:mt-10 p-10 text-center">
                 <p className="lg:text-lg font-medium">
-                    Mint a NFT to start your 1st post!<br />
-                    <span>{totalNftSupply - totalNftMinted} </span> Koru DAO NFTs will be available<br />
-                    on December 13, 18:00 CET
+                    Mint a NFT to start your 1st post!
+                    <br />
+                    January 12, 17:00 CET
                 </p>
                 <p className="mt-4 font-bold">
                     The Koru DAO NFT minting starts in:
