@@ -22,7 +22,7 @@ export default function SendMessageBox() {
                 <div className="flex justify-center mt-4">
                     <a
                         className="block bg-koru-pink text-white px-6 py-3 rounded-2xl font-medium"
-                        href="https://koru.infura-ipfs.io/ipfs/QmVBbqwcdkg4m2bGhCTdRQF1ByDw4pWKUcPfkeRzXJxCo2"
+                        href="https://koru.infura-ipfs.io/ipfs/QmTctb4n1n4jWfG3m9JrWsCSnDrdQxu8yPUAbVTJC2SYwz"
                         target="_blank"
                     >
                         Add it to my calendar
