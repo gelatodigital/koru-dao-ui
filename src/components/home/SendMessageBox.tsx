@@ -192,7 +192,7 @@ export default function SendMessageBox() {
                         </p>
                         <textarea
                             onChange={(e) => setUserMessage(e.target.value)}
-                            disabled={isPosted || !nftId || !userPost?.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                            disabled={isPosted || !nftId || !userPost?.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature}
                             rows={4}
                             className="w-full p-4 mt-4 min-h-[100px]"
                             placeholder="Hello, world!"
@@ -201,7 +201,7 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            {address && <div className="flex justify-end mt-10 items-center gap-6">
+            {address && userPost?.canPost && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
 
