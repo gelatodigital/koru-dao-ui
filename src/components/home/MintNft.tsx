@@ -1,10 +1,13 @@
 import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { relayTransit } from '../../blockchain/contracts/relayTransit.factory';
 import { supportedChains } from '../../blockchain/constants';
 import { ethers, Signer } from 'ethers';
 import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
-import { relayV0Send } from '../../utils/relayV0';
+import { nftContract } from '../../blockchain/contracts/nftContract.factory';
+import { GelatoRelay, SponsoredCallERC2771Request } from '@gelatonetwork/relay-sdk';
+
+const oneBalanceMumbaiApiKey = import.meta.env.VITE_ONE_BALANCE_MUMBAI_API_KEY;
+const oneBalancePolygonApiKey = import.meta.env.VITE_ONE_BALANCE_POLYGON_API_KEY;
 
 export default function MintNft() {
 
@@ -28,65 +31,31 @@ export default function MintNft() {
         if (chain?.id === 137 && !lensHandler) return;
         try {
             setMintModal(true);
-            const contract = relayTransit.connect(supportedChains[chain?.id as number].relayTransit, signer as Signer);
+            const koruDaoNft = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
 
-            const domain: any = {
-                name: "KoruDaoRelayTransit",
-                version: "1",
-                chainId: chain?.id,
-                verifyingContract: supportedChains[chain?.id as number].relayTransit,
-            };
+            const data = koruDaoNft.interface.encodeFunctionData("mint", []);
 
-            const mintType = [
-                {
-                    name: "user",
-                    type: "address",
-                },
-                { name: "nonce", type: "uint256" },
-                {
-                    name: "deadline",
-                    type: "uint256",
-                },
-            ];
+            if(!chain || !address) throw new Error("!chain || !address");
 
-            const types = { Mint: mintType };
-            const deadline = (await provider.getBlock("latest")).timestamp + 300;
-            const nonce = await contract.nonces(address);
-
-            const message = {
-                user: address,
-                nonce,
-                deadline,
-            };
-
-
-            const signature = await signTypedDataAsync({
-                domain,
-                types,
-                value: message,
-            });
-
-            const r = "0x" + signature.substring(2, 66);
-            const s = "0x" + signature.substring(66, 130);
-            const vStr = signature.substring(130, 132);
-            const v = parseInt(vStr, 16);
-
-            const sig = { v, r, s, deadline };
-
-            const fee = ethers.utils.parseEther('0.05'); // TODO: add estimations?
-            const data = contract.interface.encodeFunctionData("mint", [
-                address,
-                fee,
-                sig,
-            ]);
-
-            const response = await relayV0Send(
-                Number(chain?.id),
-                supportedChains[chain?.id as number].relayTransit,
+            const request: SponsoredCallERC2771Request = {
+                chainId: chain.id,
+                target: koruDaoNft.address,
                 data,
-                fee.toString(),
-                10_000_000,
+                user: address
+              };
+
+            const relay = new GelatoRelay()
+            const relayProvider = new ethers.providers.Web3Provider(window.ethereum as any);
+
+            const oneBalanceApiKey = chain.id == 137 ? oneBalancePolygonApiKey : oneBalanceMumbaiApiKey;
+
+            const response = await relay.sponsoredCallERC2771(
+                request,
+                relayProvider,
+                oneBalanceApiKey
             );
+
+            console.log(response)
 
             if (response) {
                 setIsMinting(true);
@@ -107,7 +76,7 @@ export default function MintNft() {
                     </figure>
                     <div className="text-center lg:text-left">
                         <p className="font-bold text-lg koru-gradient-text-3">
-                            <span>{totalNftSupply - totalNftMinted} </span>
+                            <span>{chain?.id === 137 ? totalNftSupply - totalNftMinted : totalNftSupply} </span>
                             Koru DAO NFTs available
                         </p>
                         {!lensHandler &&
