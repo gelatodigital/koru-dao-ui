@@ -14,6 +14,7 @@ export const supportedChains: {
         lensUrl: string;
         openSeaUrl: string;
         relayTransit: string;
+        timeRestriction: string
     };
 } = {
     137: {
@@ -25,6 +26,7 @@ export const supportedChains: {
         freeCollectModule: '0x23b9467334bEb345aAa6fd1545538F3d54436e96',
         lensHub: '0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d',
         relayTransit: '0xcEDdF46A0B2AFBFEeD1E27ebD99CB804E03706B3',
+        timeRestriction: '',
         maxFee: '0.1',
         target: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-polygon',
@@ -41,6 +43,7 @@ export const supportedChains: {
         freeCollectModule: '0x0BE6bD7092ee83D44a6eC1D949626FeE48caB30c',
         lensHub: '0x60Ae865ee4C725cd04353b5AAb364553f56ceF82',
         relayTransit: '0xC401cA07564D54bA47b542eD9838A2a36648C954',
+        timeRestriction: '0xd1ad9d9fd077e3B8268EaC7Fedd542487dE4AB25',
         maxFee: '1',
         target: '0x2334Bb5d5A1547970767315dE048e939C94D6E34',
         subgraphUrl: 'https://api.thegraph.com/subgraphs/name/gelatodigital/poke-me-mumbai',
