@@ -18,8 +18,8 @@ export const supportedChains: {
     };
 } = {
     137: {
-        lensHandle: 'korudao.lens',
-        lensProfileId: '0xa738',
+        lensHandle: 'alpha2.lens',
+        lensProfileId: '0x2596',
         nft: '0x3Fc16819b0271Ad887BE36885b58Cff37117Ec79',
         sponsor: '0x5ce6047a715B1919A58C549E6FBc1921B4d9287D',
         koru: '0x7A1EC66a1314a00535D0C327931566A29C90deC8',
