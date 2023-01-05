@@ -10,7 +10,6 @@ export default function MintNftModal(props: any) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            console.log('Minting');
             if (nftId) {
                 setIsMinted(true);
                 setIsMinting(false);
