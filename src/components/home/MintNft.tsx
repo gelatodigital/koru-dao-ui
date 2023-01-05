@@ -61,6 +61,7 @@ export default function MintNft() {
                 setIsMinting(true);
             }
         } catch (e) {
+            console.log(e)
             debugger;
             setMintModal(false);
             setIsMinting(false);
