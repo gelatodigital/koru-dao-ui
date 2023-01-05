@@ -144,7 +144,7 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            {address && userPost?.canPost && <div className="flex justify-end mt-10 items-center gap-6">
+            {address && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
 
