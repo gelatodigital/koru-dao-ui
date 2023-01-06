@@ -80,7 +80,7 @@ export default function MintNft() {
                             <span>{chain?.id === 137 ? totalNftSupply - totalNftMinted : totalNftSupply} </span>
                             Koru DAO NFTs available
                         </p>
-                        {!lensHandler &&
+                        {!lensHandler && chain?.id === 137 &&
                           <p className="text-red-600 text-sm block">
                               You must have a Lens handle to mint.
                           </p>
