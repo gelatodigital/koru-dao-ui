@@ -40,10 +40,15 @@ export default function App() {
         },
     });
 
+    const openDate = new Date(import.meta.env.VITE_MINT_DATE);
+
     return (
         <div className="mx-auto container p-5 pb-20 relative">
             <Header />
             <main className="mt-6 lg:mt-20 md:w-[640px] mx-auto">
+            <h1>{isMintingOpen ? "Open" : "Close"}</h1>
+            <h1>{openDate.getTime()}</h1>
+            <h1>{new Date().getTime()}</h1>
 
                 {!isMintingOpen && <UiCountdownMint />}
 
