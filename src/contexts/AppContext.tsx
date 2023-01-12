@@ -152,7 +152,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
 
     function getIsMintingOpen() {
         const timeNow = new Date();
-        setIsMintingOpen(timeNow > openDate);
+        setIsMintingOpen(timeNow.getTime() > openDate.getTime());
     }
 
     useEffect(() => {
