@@ -1,7 +1,7 @@
 import UiIcon from '../globals/UiIcon';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { ethers, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { v4 as uuid } from 'uuid';
@@ -20,8 +20,6 @@ export default function SendMessageBox() {
     const { chain } = useNetwork();
     const { address } = useAccount();
     const { data: signer } = useSigner();
-    const provider = useProvider();
-    const { signTypedDataAsync } = useSignTypedData();
 
     const { lensHandler, publications, setPublications, userPost, nftId }: any = useContext(AppContext);
 
@@ -76,16 +74,16 @@ export default function SendMessageBox() {
 
         const data = koruDao.interface.encodeFunctionData("post", [postData]);
 
-        if(!chain || !address) throw new Error("!chain || !address");
+        if (!chain || !address) throw new Error("!chain || !address");
 
         const request: SponsoredCallERC2771Request = {
             chainId: chain.id,
             target: koruDao.address,
             data,
-            user: address
-          };
+            user: address,
+        };
 
-        return request
+        return request;
     };
 
     const post = async () => {
@@ -94,7 +92,7 @@ export default function SendMessageBox() {
 
             const request = await makeLensPost();
 
-            const relay = new GelatoRelay()
+            const relay = new GelatoRelay();
             const relayProvider = new ethers.providers.Web3Provider(window.ethereum as any);
 
             const oneBalanceApiKey = chain?.id == 137 ? oneBalancePolygonApiKey : oneBalanceMumbaiApiKey;
@@ -102,8 +100,8 @@ export default function SendMessageBox() {
             const response = await relay.sponsoredCallERC2771(
                 request,
                 relayProvider,
-                oneBalanceApiKey
-              );
+                oneBalanceApiKey,
+            );
 
             console.log(response);
 
@@ -144,7 +142,7 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            {address && <div className="flex justify-end mt-10 items-center gap-6">
+            {nftId && address && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
 

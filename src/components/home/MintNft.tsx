@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { AppContext } from '../../contexts/AppContext';
 import { supportedChains } from '../../blockchain/constants';
 import { ethers, Signer } from 'ethers';
-import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { nftContract } from '../../blockchain/contracts/nftContract.factory';
 import { GelatoRelay, SponsoredCallERC2771Request } from '@gelatonetwork/relay-sdk';
 
@@ -24,8 +24,6 @@ export default function MintNft() {
     const { address } = useAccount();
     const { chain } = useNetwork();
     const { data: signer } = useSigner();
-    const provider = useProvider();
-    const { signTypedDataAsync } = useSignTypedData();
 
     const mint = async () => {
         if (chain?.id === 137 && !lensHandler) return;
@@ -35,16 +33,16 @@ export default function MintNft() {
 
             const data = koruDaoNft.interface.encodeFunctionData("mint", []);
 
-            if(!chain || !address) throw new Error("!chain || !address");
+            if (!chain || !address) throw new Error("!chain || !address");
 
             const request: SponsoredCallERC2771Request = {
                 chainId: chain.id,
                 target: koruDaoNft.address,
                 data,
-                user: address
-              };
+                user: address,
+            };
 
-            const relay = new GelatoRelay()
+            const relay = new GelatoRelay();
             const relayProvider = new ethers.providers.Web3Provider(window.ethereum as any);
 
             const oneBalanceApiKey = chain.id == 137 ? oneBalancePolygonApiKey : oneBalanceMumbaiApiKey;
@@ -52,17 +50,14 @@ export default function MintNft() {
             const response = await relay.sponsoredCallERC2771(
                 request,
                 relayProvider,
-                oneBalanceApiKey
+                oneBalanceApiKey,
             );
-
-            console.log(response)
 
             if (response) {
                 setIsMinting(true);
             }
         } catch (e) {
-            console.log(e)
-            debugger;
+            console.log(e);
             setMintModal(false);
             setIsMinting(false);
         }
