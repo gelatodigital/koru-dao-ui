@@ -10,7 +10,7 @@ export default function UiCountdownMint() {
                 <p className="lg:text-lg font-medium">
                     Mint a NFT to start your 1st post!
                     <br />
-                    January 12, 17:00 CET
+                    February 15, 17:00 CET
                 </p>
                 <p className="mt-4 font-bold">
                     The Koru DAO NFT minting starts in:
