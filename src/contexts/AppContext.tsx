@@ -71,11 +71,13 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     // Get the connected user last post
     const getLastPost = async () => {
         try {
-            const koru = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
             const nft = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
             const time = timeRestriction.connect(supportedChains[chain?.id as number].timeRestriction, signer as Signer);
 
             const tokenId = await nft.tokenOfOwnerByIndex(address, 0);
+
+            if (!tokenId) return;
+
             const lastPost = await time.lastPost(tokenId);
 
             const postInterval = await time.actionInterval();
