@@ -47,7 +47,7 @@ export default function App() {
 
                 {!isMintingOpen && <UiCountdownMint />}
 
-                {isMintingOpen && isConnected && !nftId &&
+                {isMintingOpen && isConnected && !nftId && (chain?.id === 137 || chain?.id === 80001) &&
                   <>
                       {
                           totalNftMinted === totalNftSupply && chain?.id === 137 ?

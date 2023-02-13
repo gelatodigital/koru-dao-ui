@@ -71,10 +71,22 @@ export default function MintNft() {
                         <img alt="Nft" src="/images/nft.png" className="rounded-full inline-block" />
                     </figure>
                     <div className="text-center lg:text-left">
-                        <p className="font-bold text-lg koru-gradient-text-3">
-                            <span>{chain?.id === 137 ? totalNftSupply - totalNftMinted : totalNftSupply} </span>
-                            Koru DAO NFTs available
-                        </p>
+                        {chain?.id === 137 &&
+                          <p className="font-bold text-lg koru-gradient-text-3">
+                              <span>{chain?.id === 137 ? totalNftSupply - totalNftMinted : totalNftSupply} </span>
+                              Koru DAO NFTs available
+                          </p>
+                        }
+                        {chain?.id === 80001 &&
+                          <>
+                              <p className="font-bold text-lg koru-gradient-text-3">
+                                  Testnet Koru DAO: Mint Open
+                              </p>
+                              <p>
+                                  You can test our Gelato’s gasless NFT minting and message posting here on Mumbai.
+                              </p>
+                          </>
+                        }
                         {!lensHandler && chain?.id === 137 &&
                           <p className="text-red-600 text-sm block">
                               You must have a Lens handle to mint.
