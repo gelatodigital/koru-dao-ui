@@ -22,7 +22,7 @@ export default function UiCountdownMint() {
                 <div className="flex justify-center mt-4">
                     <a
                         className="block bg-koru-pink text-white px-6 py-3 rounded-2xl font-medium"
-                        href="https://koru.infura-ipfs.io/ipfs/QmTctb4n1n4jWfG3m9JrWsCSnDrdQxu8yPUAbVTJC2SYwz"
+                        href="https://koru.infura-ipfs.io/ipfs/QmRv3u4QYY27vK51ENNr5bNbYmWcckYZdnWJBm7mqPL7yh"
                         target="_blank"
                     >
                         Add it to my calendar
