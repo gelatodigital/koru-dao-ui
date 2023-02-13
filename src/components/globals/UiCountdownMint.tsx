@@ -10,7 +10,7 @@ export default function UiCountdownMint() {
                 <p className="lg:text-lg font-medium">
                     Mint a NFT to start your 1st post!
                     <br />
-                    February 15, 17:00 CET
+                    February 15, 16:30 CET
                 </p>
                 <p className="mt-4 font-bold">
                     The Koru DAO NFT minting starts in:
@@ -22,7 +22,7 @@ export default function UiCountdownMint() {
                 <div className="flex justify-center mt-4">
                     <a
                         className="block bg-koru-pink text-white px-6 py-3 rounded-2xl font-medium"
-                        href="https://koru.infura-ipfs.io/ipfs/QmRv3u4QYY27vK51ENNr5bNbYmWcckYZdnWJBm7mqPL7yh"
+                        href="https://koru.infura-ipfs.io/ipfs/QmeiFo3Rbct5bGYyyQo1b1KnQ533corfCZxQhnUb2QuDJX"
                         target="_blank"
                     >
                         Add it to my calendar
