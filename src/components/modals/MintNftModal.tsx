@@ -10,7 +10,6 @@ export default function MintNftModal(props: any) {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            console.log('Minting');
             if (nftId) {
                 setIsMinted(true);
                 setIsMinting(false);
@@ -31,7 +30,7 @@ export default function MintNftModal(props: any) {
                               <UiIcon icon="loading-2" classes="w-32 h-32 absolute animate animate-spin" />
                           </div>
                           <p className="font-bold text-2xl">
-                              NFT minting..., please hang on a little bit.
+                              NFT minting... please wait a moment...
                           </p>
                       </>
                     }

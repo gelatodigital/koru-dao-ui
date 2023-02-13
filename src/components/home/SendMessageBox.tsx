@@ -1,7 +1,7 @@
 import UiIcon from '../globals/UiIcon';
 import { useContext, useState } from 'react';
 import { AppContext } from '../../contexts/AppContext';
-import { useAccount, useNetwork, useProvider, useSigner, useSignTypedData } from 'wagmi';
+import { useAccount, useNetwork, useSigner } from 'wagmi';
 import { ethers, Signer } from 'ethers';
 import { supportedChains } from '../../blockchain/constants';
 import { v4 as uuid } from 'uuid';
@@ -9,16 +9,17 @@ import { pinToIPFS, uploadToIPFS } from '../../utils/ipfs';
 // @ts-ignore
 import CircularProgress from '../../utils/circularProgress';
 import { CountTimer } from '../globals/CountTimer';
-import { relayTransit } from '../../blockchain/contracts/relayTransit.factory';
-import { relayV0Send } from '../../utils/relayV0';
+import { koruContract } from '../../blockchain/contracts/koruContract.factory';
+import { GelatoRelay, SponsoredCallERC2771Request } from '@gelatonetwork/relay-sdk';
+
+const oneBalanceMumbaiApiKey = import.meta.env.VITE_ONE_BALANCE_MUMBAI_API_KEY;
+const oneBalancePolygonApiKey = import.meta.env.VITE_ONE_BALANCE_POLYGON_API_KEY;
 
 export default function SendMessageBox() {
 
     const { chain } = useNetwork();
     const { address } = useAccount();
     const { data: signer } = useSigner();
-    const provider = useProvider();
-    const { signTypedDataAsync } = useSignTypedData();
 
     const { lensHandler, publications, setPublications, userPost, nftId }: any = useContext(AppContext);
 
@@ -56,62 +57,12 @@ export default function SendMessageBox() {
     };
 
     const makeLensPost = async () => {
-        const contract = relayTransit.connect(supportedChains[chain?.id as number].relayTransit, signer as Signer);
-
-        const domain: any = {
-            name: "KoruDaoRelayTransit",
-            version: "1",
-            chainId: chain?.id,
-            verifyingContract: supportedChains[chain?.id as number].relayTransit,
-        };
-
-        const postType = [
-            {
-                name: "user",
-                type: "address",
-            },
-            {
-                name: "nonce",
-                type: "uint256",
-            },
-            {
-                name: "deadline",
-                type: "uint256",
-            },
-            {
-                name: "profileId",
-                type: "uint256",
-            },
-            {
-                name: "contentURI",
-                type: "string",
-            },
-            {
-                name: "collectModule",
-                type: "address",
-            },
-            {
-                name: "collectModuleInitData",
-                type: "bytes",
-            },
-            {
-                name: "referenceModule",
-                type: "address",
-            },
-            {
-                name: "referenceModuleInitData",
-                type: "bytes",
-            },
-        ];
-
-        const types = { Post: postType };
-        const deadline = (await provider.getBlock("latest")).timestamp + 300;
-        const nonce = await contract.nonces(address);
+        const koruDao = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
 
         const cid = await uploadIpfs();
         const contentURI = "https://koru.infura-ipfs.io/ipfs/" + cid;
 
-        const postVars = {
+        const postData = {
             profileId: supportedChains[chain?.id as number].lensProfileId,
             contentURI,
             collectModule: supportedChains[chain?.id as number].freeCollectModule,
@@ -121,48 +72,38 @@ export default function SendMessageBox() {
             referenceModuleInitData: "0x",
         };
 
-        const message = {
+        const data = koruDao.interface.encodeFunctionData("post", [postData]);
+
+        if (!chain || !address) throw new Error("!chain || !address");
+
+        const request: SponsoredCallERC2771Request = {
+            chainId: chain.id,
+            target: koruDao.address,
+            data,
             user: address,
-            nonce,
-            deadline,
-            ...postVars,
         };
 
-        const signature = await signTypedDataAsync({
-            domain,
-            types,
-            value: message,
-        });
-
-        const r = "0x" + signature.substring(2, 66);
-        const s = "0x" + signature.substring(66, 130);
-        const vStr = signature.substring(130, 132);
-        const v = parseInt(vStr, 16);
-        const sig = { v, r, s, deadline };
-        const fee = ethers.utils.parseEther('0.05');
-
-        return contract.interface.encodeFunctionData("post", [
-            address,
-            fee,
-            postVars,
-            sig,
-        ]);
+        return request;
     };
 
     const post = async () => {
         try {
             setIsGettingSignature(true);
 
-            const data = await makeLensPost();
+            const request = await makeLensPost();
 
-            const fee = ethers.utils.parseEther('0.05');
-            const response = await relayV0Send(
-                Number(chain?.id),
-                supportedChains[chain?.id as number].relayTransit,
-                data,
-                fee.toString(),
-                10_000_000,
+            const relay = new GelatoRelay();
+            const relayProvider = new ethers.providers.Web3Provider(window.ethereum as any);
+
+            const oneBalanceApiKey = chain?.id == 137 ? oneBalancePolygonApiKey : oneBalanceMumbaiApiKey;
+
+            const response = await relay.sponsoredCallERC2771(
+                request,
+                relayProvider,
+                oneBalanceApiKey,
             );
+
+            console.log(response);
 
             if (!response?.taskId) {
                 throw 'Failed to post message';
@@ -201,7 +142,7 @@ export default function SendMessageBox() {
                     </div>
                 </div>
             </div>
-            {address && userPost?.canPost && <div className="flex justify-end mt-10 items-center gap-6">
+            {nftId && address && <div className="flex justify-end mt-10 items-center gap-6">
 
                 <div className="text-sm opacity-30">
 

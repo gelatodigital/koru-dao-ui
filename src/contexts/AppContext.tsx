@@ -6,6 +6,7 @@ import { GET_DEFAULT_PROFILES, GET_PUBLICATIONS } from '../utils/utils';
 import { Signer } from 'ethers';
 import request from 'graphql-request';
 import { koruContract } from '../blockchain/contracts/koruContract.factory';
+import { timeRestriction } from '../blockchain/contracts/timeRestriction.factory';
 
 const contextDefaultValues: any = {
     connectModal: true,
@@ -70,13 +71,17 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     // Get the connected user last post
     const getLastPost = async () => {
         try {
-            const contract = koruContract.connect(supportedChains[chain?.id as number].koru, signer as Signer);
             const nft = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const time = timeRestriction.connect(supportedChains[chain?.id as number].timeRestriction, signer as Signer);
 
             const tokenId = await nft.tokenOfOwnerByIndex(address, 0);
-            const lastPost = await contract.lastPost(tokenId);
 
-            const postInterval = await contract.postInterval();
+            if (!tokenId) return;
+
+            const lastPost = await time.lastPost(tokenId);
+
+            const postInterval = await time.actionInterval();
+
             if (lastPost && postInterval) {
                 const _last = Number(lastPost.toString()) * 1000;
                 const _interval = Number(postInterval.toString()) * 1000;

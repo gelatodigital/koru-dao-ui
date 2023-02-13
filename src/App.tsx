@@ -1,5 +1,5 @@
 import Header from './components/globals/Header';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import iconGelato from '@/assets/icons/icon-gelato.svg';
 import { AppContext } from './contexts/AppContext';
 import { useContext } from 'react';
@@ -28,6 +28,7 @@ export default function App() {
         isEligible,
         isMintingOpen,
     } = useContext(AppContext);
+    const { chain } = useNetwork();
 
     const intervalMS = 45 * 1000;
     useRegisterSW({
@@ -49,7 +50,7 @@ export default function App() {
                 {isMintingOpen && isConnected && !nftId &&
                   <>
                       {
-                          totalNftMinted === totalNftSupply ?
+                          totalNftMinted === totalNftSupply && chain?.id === 137 ?
                               <BuyNft />
                               :
                               <MintNft />

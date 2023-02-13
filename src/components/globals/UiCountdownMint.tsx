@@ -1,6 +1,6 @@
 import { CountTimer } from './CountTimer';
 
-export default function SendMessageBox() {
+export default function UiCountdownMint() {
 
     const openDate = new Date(import.meta.env.VITE_MINT_DATE);
 
