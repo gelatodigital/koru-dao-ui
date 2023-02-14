@@ -28,6 +28,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [lensHandler, setLensHandler] = useState<number | null>(null);
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
     const [publications, setPublications] = useState<any[]>([]);
+    const [lensProfileMinted, setLensProfileMinted] = useState<boolean>(false);
 
     const [notEligibleModal, setNotEligibleModal] = useState<boolean>(true);
     const [isEligible, setIsEligible] = useState<boolean>(false);
@@ -130,6 +131,16 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const hasMinted = async (id: string) => {
+        try {
+            const contract = nftContract.connect(supportedChains[chain?.id as number].nft, signer as Signer);
+            const lensProfileMinted = await contract.lensProfileMinted(id);
+            setLensProfileMinted(lensProfileMinted);
+        } catch (err) {
+            console.warn('Error getting lensProfileMinted');
+        }
+    };
+
     const getWalletLensHandle = async () => {
         try {
             const { defaultProfile } = await request(supportedChains[chain?.id as number].lensUrl, GET_DEFAULT_PROFILES, {
@@ -138,8 +149,9 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 },
             });
             setLensHandler(defaultProfile);
-            // TODO check if the handler is whitelisted
+            hasMinted(defaultProfile.id);
             setNoLensModal(chain?.id === 137 && !defaultProfile);
+
         } catch (err) {
             setNoLensModal(true);
             console.warn('No lens handler was found');
@@ -243,6 +255,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 notEligibleModal,
                 isEligible,
                 isMintingOpen,
+                lensProfileMinted,
             }}
         >
             {children}

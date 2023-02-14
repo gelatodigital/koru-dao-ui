@@ -7,9 +7,9 @@
                 "type": "bool"
             },
             {
-                "internalType": "bool",
-                "name": "_paused",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "_mintTime",
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
@@ -44,6 +44,17 @@
         ],
         "stateMutability": "nonpayable",
         "type": "constructor"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "operator",
+                "type": "address"
+            }
+        ],
+        "name": "OperatorNotAllowed",
+        "type": "error"
     },
     {
         "anonymous": false,
@@ -124,7 +135,7 @@
         "inputs": [
             {
                 "internalType": "address",
-                "name": "to",
+                "name": "operator",
                 "type": "address"
             },
             {
@@ -134,8 +145,7 @@
             }
         ],
         "name": "approve",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -159,8 +169,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "baseUri",
         "outputs": [
             {
@@ -173,8 +182,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "gelatoRelay",
         "outputs": [
             {
@@ -203,6 +211,34 @@
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_symbol",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_baseUri",
+                "type": "string"
+            },
+            {
+                "internalType": "bool",
+                "name": "_paused",
+                "type": "bool"
+            }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -254,27 +290,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "forwarder",
-                "type": "address"
-            }
-        ],
-        "name": "isTrustedForwarder",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "koruDaoProfileId",
         "outputs": [
             {
@@ -287,8 +303,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "lensHub",
         "outputs": [
             {
@@ -302,7 +317,25 @@
     },
     {
         "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
         ],
+        "name": "lensProfileMinted",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "maxSupply",
         "outputs": [
             {
@@ -315,8 +348,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "minFollowers",
         "outputs": [
             {
@@ -329,8 +361,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "minPubCount",
         "outputs": [
             {
@@ -343,17 +374,27 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "mint",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
-        "inputs": [
+        "inputs": [],
+        "name": "mintTime",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
         ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "name",
         "outputs": [
             {
@@ -362,7 +403,20 @@
                 "type": "string"
             }
         ],
-        "stateMutability": "pure",
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "_users",
+                "type": "address[]"
+            }
+        ],
+        "name": "ownerMint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -385,8 +439,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "paused",
         "outputs": [
             {
@@ -399,8 +452,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "restricted",
         "outputs": [
             {
@@ -431,8 +483,7 @@
             }
         ],
         "name": "safeTransferFrom",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -455,13 +506,12 @@
             },
             {
                 "internalType": "bytes",
-                "name": "_data",
+                "name": "data",
                 "type": "bytes"
             }
         ],
         "name": "safeTransferFrom",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -479,8 +529,7 @@
             }
         ],
         "name": "setApprovalForAll",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -493,8 +542,7 @@
             }
         ],
         "name": "setBaseUri",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -507,8 +555,7 @@
             }
         ],
         "name": "setPaused",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
@@ -532,8 +579,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "symbol",
         "outputs": [
             {
@@ -542,7 +588,7 @@
                 "type": "string"
             }
         ],
-        "stateMutability": "pure",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -608,8 +654,7 @@
         "type": "function"
     },
     {
-        "inputs": [
-        ],
+        "inputs": [],
         "name": "totalSupply",
         "outputs": [
             {
@@ -640,8 +685,7 @@
             }
         ],
         "name": "transferFrom",
-        "outputs": [
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     }

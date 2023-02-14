@@ -15,6 +15,7 @@ export const supportedChains: {
         openSeaUrl: string;
         relayTransit: string;
         timeRestriction: string
+        openSeaCollection: string
     };
 } = {
     137: {
@@ -33,6 +34,7 @@ export const supportedChains: {
         lensUrl: 'https://api.lens.dev/',
         lensProfileUrl: 'https://lenster.xyz',
         openSeaUrl: 'https://opensea.io/assets/matic/',
+        openSeaCollection: 'https://opensea.io/collection/gelalpha',
     },
     80001: {
         lensHandle: 'korudao.test',
@@ -50,5 +52,6 @@ export const supportedChains: {
         lensUrl: 'https://api-mumbai.lens.dev/',
         lensProfileUrl: 'https://testnet.lenster.xyz',
         openSeaUrl: 'https://testnets.opensea.io/assets/mumbai/',
+        openSeaCollection: 'https://opensea.io/collection/gelalpha',
     },
 };
