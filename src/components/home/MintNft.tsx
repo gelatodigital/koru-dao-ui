@@ -14,11 +14,11 @@ export default function MintNft() {
     const {
         lensHandler,
         setMintModal,
-        isMinting,
         setIsMinting,
         totalNftMinted,
         totalNftSupply,
         isEligible,
+        setMintTaskId,
     } = useContext(AppContext);
 
     const { address } = useAccount();
@@ -54,6 +54,7 @@ export default function MintNft() {
             );
 
             if (response) {
+                setMintTaskId(response.taskId);
                 setIsMinting(true);
             }
         } catch (e) {

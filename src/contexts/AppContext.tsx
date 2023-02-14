@@ -29,6 +29,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
     const [noLensModal, setNoLensModal] = useState<boolean>(false);
     const [publications, setPublications] = useState<any[]>([]);
     const [lensProfileMinted, setLensProfileMinted] = useState<boolean>(false);
+    const [mintTaskId, setMintTaskId] = useState<string | null>(null);
 
     const [notEligibleModal, setNotEligibleModal] = useState<boolean>(true);
     const [isEligible, setIsEligible] = useState<boolean>(false);
@@ -256,6 +257,8 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
                 isEligible,
                 isMintingOpen,
                 lensProfileMinted,
+                mintTaskId,
+                setMintTaskId,
             }}
         >
             {children}
