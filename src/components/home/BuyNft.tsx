@@ -19,7 +19,7 @@ export default function BuyNft() {
                     </div>
                 </div>
                 <a
-                    href={`${supportedChains[chain?.id as number ?? 137].openSeaUrl}`}
+                    href={supportedChains[chain?.id as number ?? 137].openSeaCollection}
                     className="koru-btn _pink inline-block"
                     target='_blank'
                 >

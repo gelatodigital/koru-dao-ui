@@ -27,6 +27,7 @@ export default function App() {
         notEligibleModal,
         isEligible,
         isMintingOpen,
+        lensProfileMinted,
     } = useContext(AppContext);
     const { chain } = useNetwork();
 
@@ -50,7 +51,7 @@ export default function App() {
                 {isMintingOpen && isConnected && !nftId && (chain?.id === 137 || chain?.id === 80001) &&
                   <>
                       {
-                          totalNftMinted === totalNftSupply && chain?.id === 137 ?
+                          lensProfileMinted || (totalNftMinted === totalNftSupply) && chain?.id === 137 ?
                               <BuyNft />
                               :
                               <MintNft />
