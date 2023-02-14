@@ -70,7 +70,7 @@ export default function App() {
 
             {isConnected && lensHandler && !nftId && !isEligible && notEligibleModal && <NoEligibleModal />}
 
-            {isConnected && !lensHandler && noLensModal && <NoHandlerModal />}
+            {isConnected && !lensHandler && noLensModal && !nftId && <NoHandlerModal />}
 
             {mintModal && <MintNftModal />}
 
