@@ -51,7 +51,7 @@ export default function App() {
                 {isMintingOpen && isConnected && !nftId && (chain?.id === 137 || chain?.id === 80001) &&
                   <>
                       {
-                          lensProfileMinted || (totalNftMinted === totalNftSupply) && chain?.id === 137 ?
+                          chain?.id === 137 && (lensProfileMinted || (totalNftMinted === totalNftSupply)) ?
                               <BuyNft />
                               :
                               <MintNft />
