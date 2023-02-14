@@ -48,7 +48,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             'User does not meet minimum follower amount defined in minFollowers (edited)',
         ];
         state.forEach((v: boolean, index: number) => {
-            if (v) {
+            if (!v) {
                 console.log(errorsMap[index]);
             }
         });
