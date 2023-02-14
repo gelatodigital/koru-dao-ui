@@ -40,6 +40,19 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
         postInterval: null,
     });
 
+    function logState(state: boolean[]) {
+        const errorsMap = [
+            'User does not have lens profile',
+            'User does not follow KoruDao',
+            'User does not meet minimum publish amount defined in minPubCount',
+            'User does not meet minimum follower amount defined in minFollowers (edited)',
+        ];
+        state.forEach((v: boolean, index: number) => {
+            if (v) {
+                console.log(errorsMap[index]);
+            }
+        });
+    }
 
     const getIsEligible = async () => {
         try {
@@ -47,6 +60,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             if (!contract.signer.getAddress) return;
 
             const isEligible = await contract.isEligible(address);
+            logState(isEligible);
             setIsEligible(isEligible[0]);
 
         } catch (err) {
