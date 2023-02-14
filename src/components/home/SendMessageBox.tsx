@@ -133,7 +133,7 @@ export default function SendMessageBox() {
                         </p>
                         <textarea
                             onChange={(e) => setUserMessage(e.target.value)}
-                            disabled={isPosted || !nftId || !userPost?.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature}
+                            disabled={isPosted || !nftId || !userPost?.canPost || isGettingSignature}
                             rows={4}
                             className="w-full p-4 mt-4 min-h-[100px]"
                             placeholder="Hello, world!"
@@ -181,7 +181,7 @@ export default function SendMessageBox() {
                   color={`var(--koru-color-${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'red' : 'purple'})`}
                 />
                 <button
-                  disabled={userMessage.length <= 3 || !nftId || !userPost.canPost || (chain?.id === 137 && !lensHandler) || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
+                  disabled={userMessage.length <= 3 || !nftId || !userPost.canPost || isGettingSignature || parseInt(String((userMessage.length * 100) / 280)) > 100}
                   onClick={() => post()}
                   className={`koru-btn _primary w-44 flex items-center gap-4 justify-center ${parseInt(String((userMessage.length * 100) / 280)) > 100 ? 'opacity-20' : ''}`}
                 >
