@@ -16,11 +16,11 @@ export default function NoHandlerModal() {
                     KoruDAO NFTs are available to active members of the Lens community. <br />
                     If you have any questions on minting please contact us.
                 </p>
-                <a href="https://t.me/gelatonetwork"
+                <a href="https://discord.gg/rsAS5Gtc"
                    className="koru-btn _primary mx-auto mt-6 inline-block"
                    target="_blank"
                 >
-                    Go to our Telegram channel
+                    Go to our Discord channel
                 </a>
             </div>} />
     );
