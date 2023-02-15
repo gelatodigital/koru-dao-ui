@@ -154,8 +154,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
             setNoLensModal(chain?.id === 137 && !defaultProfile);
 
         } catch (err) {
-            setNoLensModal(true);
-            console.warn('No lens handler was found');
+            if (chain?.id === 137) {
+                setNoLensModal(true);
+                console.warn('No lens handler was found');
+            }
         }
     };
 
