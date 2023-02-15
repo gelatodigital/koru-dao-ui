@@ -19,11 +19,15 @@ export default function Header() {
         <header className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex gap-5 items-center">
                 <img src={IconLogo} alt="Koru DAO" className="w-40" />
-                <img
-                    src={PoweredGelato}
-                    className="w-36 shrink-0"
-                    alt="Powered by Gelato"
-                />
+                <a href="https://www.gelato.network/"
+                   target="_blank"
+                >
+                    <img
+                        src={PoweredGelato}
+                        className="w-36 shrink-0"
+                        alt="Powered by Gelato"
+                    />
+                </a>
             </div>
             <div className="mt-6 md:mt-0 items-center gap-2 md:gap-4 flex">
                 {isConnected &&
