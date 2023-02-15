@@ -34,11 +34,11 @@ export const supportedChains: {
         lensUrl: 'https://api.lens.dev/',
         lensProfileUrl: 'https://lenster.xyz',
         openSeaUrl: 'https://opensea.io/assets/matic/',
-        openSeaCollection: 'https://opensea.io/collection/gelalpha',
+        openSeaCollection: 'https://opensea.io/collection/korudao',
     },
     80001: {
-        lensHandle: 'korudao.test',
-        lensProfileId: '0x4252',
+        lensHandle: 'korudaomumbai.test',
+        lensProfileId: '0x6BFF',
         nft: '0xD4ed111F25087cea967ac3be548d52577C92b424',
         sponsor: '0x5ce6047a715B1919A58C549E6FBc1921B4d9287D',
         koru: '0x6bC45934A408f7151093479bf59933cD3B75701d',
@@ -52,6 +52,6 @@ export const supportedChains: {
         lensUrl: 'https://api-mumbai.lens.dev/',
         lensProfileUrl: 'https://testnet.lenster.xyz',
         openSeaUrl: 'https://testnets.opensea.io/assets/mumbai/',
-        openSeaCollection: 'https://opensea.io/collection/gelalpha',
+        openSeaCollection: 'https://testnets.opensea.io/collection/koru-dao-nft',
     },
 };
