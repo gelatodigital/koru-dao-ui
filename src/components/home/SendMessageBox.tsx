@@ -21,7 +21,7 @@ export default function SendMessageBox() {
     const { address } = useAccount();
     const { data: signer } = useSigner();
 
-    const { lensHandler, publications, setPublications, userPost, nftId }: any = useContext(AppContext);
+    const { userPost, nftId }: any = useContext(AppContext);
 
     const [userMessage, setUserMessage] = useState<string>('');
     const [isPosted, setIsPosted] = useState<any>(false);
@@ -31,8 +31,8 @@ export default function SendMessageBox() {
         const ipfs = {
             version: '1.0.0',
             metadata_id: uuid(),
-            description: userMessage,
-            content: userMessage,
+            description: getSanitizedMessage(),
+            content: getSanitizedMessage(),
             external_url: `${supportedChains[chain?.id as number].lensProfileUrl}/u/${supportedChains[chain?.id as number].lensHandle}`,
             image: null,
             imageMimeType: null,
@@ -118,6 +118,11 @@ export default function SendMessageBox() {
             setIsPosted(false);
         }
     };
+
+    function getSanitizedMessage() {
+        const regex = /([a-z0-9][a-z0-9\-]{0,61}[a-z0-9]\.)+[a-z0-9][a-z0-9\-]*[a-z0-9]/g;
+        return userMessage.replace(regex, '-url-removed-');
+    }
 
     return (
         <div>
