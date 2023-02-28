@@ -120,10 +120,8 @@ export default function SendMessageBox() {
     };
 
     function getSanitizedMessage() {
-        const regex = /([a-z0-9][a-z0-9\-]{0,61}[a-z0-9]\.)+[a-z0-9][a-z0-9\-]*[a-z0-9]/g;
+        const regex = /(http(s?)):\/\/([a-z0-9][a-z0-9\-]{0,61}[a-z0-9]\.)+[a-z0-9][a-z0-9\-]*[a-z0-9]/g;
         return userMessage
-            .replace('https://', '')
-            .replace('http://', '')
             .replace(regex, '[link removed]')
     }
 
