@@ -122,9 +122,7 @@ export default function SendMessageBox() {
     function getSanitizedMessage() {
         const regex = /([a-z0-9][a-z0-9\-]{0,61}[a-z0-9]\.)+[a-z0-9][a-z0-9\-]*[a-z0-9]/g;
         return userMessage
-            .replace('lenters.xyz', 'LENTERS_XYZ')
-            .replace(regex, '-url-removed-')
-            .replace('LENTERS_XYZ', 'lenters.xyz');
+            .replace(regex, '[link removed]')
     }
 
     return (
