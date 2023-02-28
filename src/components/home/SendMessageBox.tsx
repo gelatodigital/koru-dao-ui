@@ -120,7 +120,7 @@ export default function SendMessageBox() {
     };
 
     function getSanitizedMessage() {
-        const regex = /(http(s?)):\/\/([a-z0-9][a-z0-9\-]{0,61}[a-z0-9]\.)+[a-z0-9][a-z0-9\-]*[a-z0-9]/g;
+        const regex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|([a-z0-9][a-z0-9\-]{0,61}[a-z0-9]\.)+[a-z0-9][a-z0-9\-]*[a-z0-9]/g;
         return userMessage
             .replace(regex, '[link removed]')
     }
