@@ -45,10 +45,7 @@ export default function MintNftModal(props: any) {
 
                         <>
                             <p className="font-bold text-xl">
-                                Your mint was unsuccessful. Please try again or <a href="https://discord.gg/rsAS5Gtc"
-                                   className="inline-block mx-2"
-                                   target="_blank"
-                                >reach out to us.</a>
+                                Your mint was unsuccessful. Please try again 
                             </p>
                             <button className="koru-btn _primary" onClick={() => setMintModal(false)}>
                                 close
